@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Reviews</title>
+</head>
+
+<body>
+
+<h1>Reviews</h1>
+
+<p>
+    <a href="{% url 'create_post' %}">Create a new review</a>
+</p>
+
+<hr>
+
+{% for r in reviews %}
+
+<div style="margin-bottom:20px;">
+
+    <h3>
+        {{ r.city.city_name }} ({{ r.rating_score }}/5)
+    </h3>
+
+    <div>
+        {% for i in "12345" %}
+            {% if forloop.counter <= r.rating_score %}
+                ⭐
+            {% else %}
+                ☆
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <p>
+        {{ r.review_text }}
+    </p>
+
+    <small>
+        by {{ r.user.username }} — {{ r.created_at }}
+    </small>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No reviews yet.</p>
+
+{% endfor %}
+
+</body>
+</html>
