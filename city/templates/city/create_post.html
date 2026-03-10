@@ -1,9 +1,21 @@
-<h1>Create Review</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Review</title>
+</head>
+<body>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Post</button>
-</form>
+    <h1>Create Review</h1>
 
-<p><a href="{% url 'review_list' %}">View all reviews</a></p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Post Review</button>
+    </form>
+
+    <p>
+        <a href="{% url 'review_list' %}">View all reviews</a>
+    </p>
+
+</body>
+</html>
