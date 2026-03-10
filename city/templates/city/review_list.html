@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +13,14 @@
     <a href="{% url 'create_post' %}">Create a new review</a>
 </p>
 
-<hr>
+<input type="text" id="citySearch" placeholder="Search by city">
 
+<hr>
 {% for r in reviews %}
 
-<div style="margin-bottom:20px;">
+<div class="review-card" style="margin-bottom:20px;">
 
-    <h3>
+    <h3 class="city-name">
         {{ r.city.city_name }} ({{ r.rating_score }}/5)
     </h3>
 
@@ -50,5 +52,6 @@
 
 {% endfor %}
 
+<script src="{% static 'js/main.js'%}"></script>
 </body>
 </html>

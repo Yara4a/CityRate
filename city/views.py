@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from .forms import PostForm
 from .models import Post
 
+def home(request):
+    return render(request, "city/homepage.html")
 
 def create_post(request):
     form = PostForm(request.POST or None)
