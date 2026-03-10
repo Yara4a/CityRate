@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}CityRate{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+
+        <a href="{% url 'review_list' %}" class="logo">
+            CityRate
+        </a>
+
+        <div class="nav-links">
+
+            <a href="{% url 'review_list' %}">Reviews</a>
+
+            <a href="{% url 'create_post' %}">
+                Create Post
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <span class="nav-user">
+                    Hi, {{ user.username }}
+                </span>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="nav-button">
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+
+
+<main class="page-container">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<footer class="site-footer">
+    <p>© 2026 CityRate – Share your travel experiences</p>
+</footer>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

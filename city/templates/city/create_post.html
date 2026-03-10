@@ -1,24 +1,25 @@
+{% extends "city/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Review</title>
-</head>
-<body>
 
-<h1>Create Review</h1>
+{% block title %}Create Review | CityRate{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Post Review</button>
-</form>
+{% block content %}
 
-<p>
-    <a href="{% url 'review_list' %}">View all reviews</a>
-</p>
+<section class="form-page">
+    <div class="form-card">
+        <h1>Create Review</h1>
+        <p class="form-subtitle">Share your travel experience with other users.</p>
 
-<script src="{% static 'js/main.js' %}"></script>
+        <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Post Review</button>
+        </form>
 
-</body>
-</html>
+        <p class="back-link">
+            <a href="{% url 'review_list' %}">← View all reviews</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}
