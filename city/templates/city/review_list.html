@@ -3,41 +3,58 @@
 <head>
     <title>City Reviews</title>
 </head>
+
 <body>
 
-    <h1>Reviews</h1>
+<h1>City Reviews</h1>
+
+<p>
+    <a href="{% url 'create_post' %}">Create a new review</a>
+</p>
+
+<hr>
+
+{% for r in reviews %}
+
+<div style="margin-bottom:20px;">
+
+    <h3>
+        {{ r.city.city_name }} ({{ r.rating_score }}/5)
+    </h3>
+
+    <!-- Rating stars -->
+    <div>
+        {% for i in "12345" %}
+            {% if forloop.counter <= r.rating_score %}
+                ⭐
+            {% else %}
+                ☆
+            {% endif %}
+        {% endfor %}
+    </div>
 
     <p>
-        <a href="{% url 'create_post' %}">Create a new review</a>
+        {{ r.review_text }}
     </p>
 
-    <hr>
+    <small>
+        by {{ r.user.username }} — {{ r.created_at }}
+    </small>
 
-    {% for r in reviews %}
-        <div style="margin-bottom: 20px;">
-            <h3>{{ r.city.city_name }} ({{ r.rating_score }}/5)</h3>
+    <p>
+        <a href="{% url 'edit_post' r.id %}">Edit</a> |
+        <a href="{% url 'delete_post' r.id %}">Delete</a>
+    </p>
 
-            <p>
-                {% for i in "12345" %}
-                    {% if forloop.counter <= r.rating_score %}
-                        ⭐
-                    {% else %}
-                        ☆
-                    {% endif %}
-                {% endfor %}
-            </p>
+</div>
 
-            <p>{{ r.review_text }}</p>
+<hr>
 
-            <small>
-                by {{ r.user.username }} — {{ r.created_at }}
-            </small>
-        </div>
+{% empty %}
 
-        <hr>
-    {% empty %}
-        <p>No reviews yet.</p>
-    {% endfor %}
+<p>No reviews yet.</p>
+
+{% endfor %}
 
 </body>
 </html>
