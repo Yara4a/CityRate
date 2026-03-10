@@ -16,6 +16,7 @@
 <input type="text" id="citySearch" placeholder="Search by city">
 
 <hr>
+
 {% for r in reviews %}
 
 <div class="review-card" style="margin-bottom:20px;">
@@ -43,10 +44,12 @@
         by {{ r.user.username }} — {{ r.created_at }}
     </small>
 
+    {% if user.is_authenticated and r.user == user %}
     <p>
         <a href="{% url 'edit_post' r.id %}">Edit</a> |
         <a href="{% url 'delete_post' r.id %}">Delete</a>
     </p>
+    {% endif %}
 
 </div>
 
@@ -58,6 +61,7 @@
 
 {% endfor %}
 
-<script src="{% static 'js/main.js'%}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
 </body>
 </html>

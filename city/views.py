@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from .forms import PostForm
-from .models import Post
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from .forms import PostForm
+from .models import Post
 
 
 @login_required(login_url="login")
@@ -13,10 +11,7 @@ def create_post(request):
 
     if request.method == "POST" and form.is_valid():
         post = form.save(commit=False)
-
-        # Independent mode: attach to a dummy user
-        post.user = User.objects.first()
-
+        post.user = request.user
         post.save()
         return redirect("review_list")
 
@@ -26,13 +21,15 @@ def create_post(request):
 def login_page(request):
     return HttpResponse("Login page coming soon.")
 
+
 def review_list(request):
     reviews = Post.objects.select_related("city", "user").order_by("-created_at")
     return render(request, "city/review_list.html", {"reviews": reviews})
 
-def edit_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
 
+@login_required(login_url="login")
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
     form = PostForm(request.POST or None, instance=post)
 
     if request.method == "POST" and form.is_valid():
@@ -41,8 +38,10 @@ def edit_post(request, post_id):
 
     return render(request, "city/edit_post.html", {"form": form})
 
+
+@login_required(login_url="login")
 def delete_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(Post, id=post_id, user=request.user)
 
     if request.method == "POST":
         post.delete()
