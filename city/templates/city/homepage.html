@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityRate</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#FCFBF4;
+color:#2E5A52;
+}
+
+a{
+text-decoration:none;
+color:#2E5A52;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:absolute;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 70px;
+z-index:10;
+}
+
+.logo img{
+width:110px;
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+align-items:center;
+}
+
+.nav-links a{
+font-weight:600;
+font-size:16px;
+}
+
+.login-btn{
+padding:0;
+border:none;
+border-radius:0;
+font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+position:relative;
+width:100%;
+aspect-ratio:3024 / 1450;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.hero-video{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-1;
+}
+
+.hero::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+z-index:1;
+}
+
+/* overlay */
+
+.hero::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.25);
+}
+
+/* content */
+
+.hero-content{
+position:relative;
+color:white;
+max-width:900px;
+padding:20px;
+z-index:2;
+}
+
+.hero-content h1{
+font-size:64px;
+font-weight:700;
+line-height:1.1;
+margin-bottom:20px;
+}
+
+.hero-content p{
+font-size:20px;
+margin-bottom:40px;
+opacity:0.9;
+}
+
+/* SEARCH */
+
+.search-box{
+display:flex;
+justify-content:center;
+}
+
+.search-form{
+position:relative;
+width:520px;
+}
+
+.search-form input{
+width:100%;
+height:60px;
+border:none;
+border-radius:40px;
+padding-left:55px;
+font-size:18px;
+outline:none;
+}
+
+.search-form button{
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+background:none;
+border:none;
+font-size:20px;
+cursor:pointer;
+}
+
+/* cities */
+
+.cities{
+margin-top:25px;
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.cities a{
+color:white;
+font-weight:600;
+border-bottom:1px solid white;
+padding-bottom:2px;
+}
+
+/* section below */
+
+.section{
+background:#FCFBF4;
+padding:80px 20px;
+text-align:center;
+}
+
+.section h2{
+font-size:36px;
+margin-bottom:20px;
+}
+
+.section p{
+max-width:700px;
+margin:auto;
+line-height:1.7;
+color:#4d6a63;
+}
+
+/* footer */
+
+.footer{
+padding:30px 60px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.footer img{
+width:50px;
+}
+
+.footer-links{
+display:flex;
+gap:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+<div class="logo">
+<img src="{% static 'images/logo.jpeg' %}">
+</div>
+
+<div class="nav-links">
+<a href="#">Sign up</a>
+<a href="#" class="login-btn">Login</a>
+</div>
+
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<video autoplay muted loop playsinline class="hero-video">
+<source src="{% static 'videos/city.mp4' %}" type="video/mp4">
+</video>
+
+<div class="hero-content">
+
+<h1>
+Document your travels.<br>
+Keep memories.<br>
+Discover new cities.
+</h1>
+
+<p>Search a city and explore real traveler experiences.</p>
+
+<div class="search-box">
+
+<form class="search-form" action="/cityrate/reviews/" method="GET">
+
+<button type="submit">⌕</button>
+
+<input
+type="text"
+name="city"
+placeholder="Search for a city"
+>
+
+</form>
+
+</div>
+
+<div class="cities">
+
+<a href="/cityrate/reviews/?city=Paris">Paris</a>
+<a href="/cityrate/reviews/?city=London">London</a>
+<a href="/cityrate/reviews/?city=New York">New York</a>
+<a href="/cityrate/reviews/?city=Australia">Australia</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- INFO SECTION -->
+
+<section class="section">
+
+<h2>Welcome to CityRate</h2>
+
+<p>
+CityRate helps you document your travels, keep memories,
+and discover new cities through real traveler reviews.
+</p>
+
+</section>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+<img src="{% static 'images/logo.jpeg' %}">
+
+<div class="footer-links">
+<a href="#">About</a>
+<a href="/cityrate/reviews/">Discover</a>
+<a href="#">Privacy</a>
+</div>
+
+</div>
+
+</body>
+</html>
