@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
-
+@login_required(login_url="login")
 def create_post(request):
     form = PostForm(request.POST or None)
 
