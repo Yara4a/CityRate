@@ -4,6 +4,7 @@ from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 
 @login_required(login_url="login")
@@ -21,6 +22,9 @@ def create_post(request):
 
     return render(request, "city/create_post.html", {"form": form})
 
+
+def login_page(request):
+    return HttpResponse("Login page coming soon.")
 
 def review_list(request):
     reviews = Post.objects.select_related("city", "user").order_by("-created_at")
