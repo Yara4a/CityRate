@@ -50,3 +50,9 @@ def delete_post(request, post_id):
         return redirect("review_list")
 
     return render(request, "city/delete_post.html", {"post": post})
+
+def login_view(request):
+    return render(request, "city/login.html")
+
+def signup_view(request):
+    return render(request, "city/signup.html")
