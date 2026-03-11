@@ -1,0 +1,36 @@
+{% extends "city/base.html" %}
+{% load static %}
+
+{% block title %}Edit Review | CityRate{% endblock %}
+
+{% block content %}
+
+<section class="form-page">
+
+    <div class="form-card">
+
+        <h1>Edit Review</h1>
+        <p class="form-subtitle">
+            Update your review for this city.
+        </p>
+
+        <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">
+                Update Review
+            </button>
+        </form>
+
+        <p class="back-link">
+            <a href="{% url 'review_list' %}">
+                ← Back to reviews
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}
