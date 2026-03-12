@@ -12,7 +12,28 @@
 
         <form method="post" class="styled-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            <p>
+                {{ form.city.label_tag }}
+                {{ form.city }}
+            </p>
+
+            <p>
+                {{ form.review_text.label_tag }}
+                {{ form.review_text }}
+            </p>
+
+            <p>
+                {{ form.rating_score.label_tag }}
+                {{ form.rating_score.as_hidden }}
+            </p>
+
+            <div class="star-rating" id="starRating">
+                <button type="button" class="star" data-value="1">★</button>
+                <button type="button" class="star" data-value="2">★</button>
+                <button type="button" class="star" data-value="3">★</button>
+                <button type="button" class="star" data-value="4">★</button>
+                <button type="button" class="star" data-value="5">★</button>
+            </div>
             <button type="submit" class="btn btn-primary">Post Review</button>
         </form>
 
