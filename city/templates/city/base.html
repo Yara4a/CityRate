@@ -15,8 +15,8 @@
 <nav class="navbar">
     <div class="nav-container">
 
-        <a href="{% url 'review_list' %}" class="logo">
-            CityRate
+        <a href="{% url 'home' %}" class="logo">
+            <img src="{% static 'images/logo.jpeg' %}" alt="CityRate logo">
         </a>
 
         <div class="nav-links">
@@ -29,13 +29,13 @@
 
             {% if user.is_authenticated %}
 
-                <span class="nav-user">
+                <a href="{% url 'account_page' %}" class="nav-user">
                     Hi, {{ user.username }}
-                </span>
+                </a>
 
             {% else %}
 
-                <a href="/admin/login/" class="nav-button">
+                <a href="{% url 'login' %}" class="nav-button">
                     Login
                 </a>
 
@@ -46,7 +46,6 @@
     </div>
 </nav>
 
-
 <main class="page-container">
 
     {% block content %}
@@ -54,11 +53,9 @@
 
 </main>
 
-
 <footer class="site-footer">
     <p>© 2026 CityRate – Share your travel experiences</p>
 </footer>
-
 
 <script src="{% static 'js/main.js' %}"></script>
 
