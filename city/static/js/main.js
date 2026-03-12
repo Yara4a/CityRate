@@ -2,12 +2,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const searchInput = document.getElementById("citySearch");
     const reviewCards = document.querySelectorAll(".review-card");
+    const noResultsMessage = document.getElementById("noResultsMessage");
 
     if (!searchInput) return;
 
     searchInput.addEventListener("keyup", function () {
 
         const searchValue = searchInput.value.toLowerCase();
+        let matchFound = false;
 
         reviewCards.forEach(function (card) {
 
@@ -24,6 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         });
+        if (noResultsMessage) {
+            if (matchFound || searchValue === "") {
+                noResultsMessage.style.display = "none";
+            } else {
+                noResultsMessage.style.display = "block";
+            }
+        }
 
     });
 
