@@ -27,6 +27,16 @@
                 Create Post
             </a>
 
+            <form class="nav-search" method="get" action="{%url 'review_list' %}">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Search cities..."
+                    value="{{ request.GET.q}}"
+            >
+            <button type="submit"></Search></button>
+            </form>
+
             {% if user.is_authenticated %}
 
                 <span class="nav-user">
