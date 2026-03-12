@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (cityName.includes(searchValue)) {
                 card.style.display = "";
+                matchFound = true;
             } else {
                 card.style.display = "none";
             }
