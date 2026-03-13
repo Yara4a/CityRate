@@ -10,12 +10,22 @@
     <p>Explore what travellers think about cities around the world.</p>
 
     <div class="hero-actions">
-        <a href="{% url 'create_post' %}" class="btn btn-primary">Create a New Review</a>
+        <a href="{% url 'create_post' %}" class="btn btn-primary">
+            Create a New Review
+        </a>
     </div>
 </section>
 
 <section class="search-section">
-    <input type="text" id="citySearch" placeholder="Search by city..." class="search-input">
+    <form method="get">
+        <input
+            type="text"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Search by city..."
+            class="search-input"
+        >
+    </form>
 </section>
 
 <section class="reviews-section">
@@ -45,17 +55,13 @@
                 by {{ r.user.username }} — {{ r.created_at }}
             </small>
 
-            {% if user.is_authenticated and r.user == user %}
-                <div class="review-actions">
-                    <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
-                    <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
-                </div>
-            {% endif %}
         </div>
     {% empty %}
         <div class="empty-state">
             <p>No reviews yet.</p>
-            <a href="{% url 'create_post' %}" class="btn btn-primary">Be the first to post</a>
+            <a href="{% url 'create_post' %}" class="btn btn-primary">
+                Be the first to post
+            </a>
         </div>
     {% endfor %}
 </section>

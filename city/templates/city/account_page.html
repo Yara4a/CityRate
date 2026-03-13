@@ -1,0 +1,94 @@
+{% extends "city/base.html" %}
+{% load static %}
+
+{% block title %}My Account | CityRate{% endblock %}
+
+{% block content %}
+
+<section class="account-layout">
+
+    <aside class="account-sidebar">
+        <div class="account-user-block">
+            <h2 class="account-username">{{ user.username }}</h2>
+
+            <a href="#" class="btn btn-small btn-logout">
+                Logout
+            </a>
+        </div>
+
+        <div class="account-menu">
+            <div class="account-menu-title active">My Account</div>
+        </div>
+    </aside>
+
+    <section class="account-main">
+        <h1 class="account-page-title">My Account</h1>
+        <p class="account-subtitle">Manage your reviews and travel posts.</p>
+
+        <div class="hero-actions account-create-btn">
+            <a href="{% url 'create_post' %}" class="btn btn-primary">
+                Create a New Review
+            </a>
+        </div>
+
+        <section class="search-section account-search">
+            <form method="get">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ search_query }}"
+                    placeholder="Search..."
+                    class="search-input"
+                >
+            </form>
+        </section>
+
+        <section class="reviews-section">
+            {% for r in reviews %}
+                <div class="review-card">
+
+                    <div class="review-top">
+                        <h3 class="city-name">{{ r.city.city_name }}</h3>
+                        <span class="rating-badge">{{ r.rating_score }}/5</span>
+                    </div>
+
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= r.rating_score %}
+                                <span>⭐</span>
+                            {% else %}
+                                <span>☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <p class="review-text">
+                        {{ r.review_text }}
+                    </p>
+
+                    <small class="review-meta">
+                        by {{ r.user.username }} — {{ r.created_at }}
+                    </small>
+
+                    {% if user.is_authenticated and r.user == user %}
+                        <div class="review-actions">
+                            <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
+                            <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+            {% empty %}
+                <div class="empty-state">
+                    <p>You haven't posted any reviews yet.</p>
+                    <a href="{% url 'create_post' %}" class="btn btn-primary">
+                        Create your first review
+                    </a>
+                </div>
+            {% endfor %}
+        </section>
+    </section>
+
+</section>
+
+{% endblock %}
