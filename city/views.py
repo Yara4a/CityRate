@@ -98,14 +98,15 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user)  # Auto-login after signing up
             return redirect("home")
     else:
         form = CustomUserCreationForm()
+
     return render(request, "city/signup.html", {"form": form})
+    
 
 def logout_view(request):
     if request.method == "POST":
         logout(request)
-        return redirect("home")
     return redirect("home")

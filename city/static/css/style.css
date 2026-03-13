@@ -285,6 +285,71 @@ body {
     border: 1px solid #d1d5db;
 }
 
+.styled-form textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.styled-form input:focus,
+.styled-form textarea:focus,
+.styled-form select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-error {
+    display: block;
+    margin-top: 6px;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+
+/* Star rating */
+.star-rating-wrapper {
+    margin-bottom: 22px;
+}
+
+.star-rating-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating .star {
+    width: auto;
+    display: inline-block;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: #d1d5db;
+    cursor: pointer;
+    margin-bottom: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.star-rating .star:hover,
+.star-rating .star:hover ~ .star {
+    color: #facc15;
+    transform: scale(1.05);
+}
+
+.star-rating input[type="radio"]:checked + .star,
+.star-rating input[type="radio"]:checked + .star ~ .star {
+    color: #facc15;
+}
+
 /* Account page */
 .account-layout {
     display: flex;
@@ -393,5 +458,11 @@ body {
 
     .account-sidebar {
         width: 100%;
+    }
+
+    .review-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
 }

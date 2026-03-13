@@ -12,7 +12,48 @@
 
         <form method="post" class="styled-form">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <p>
+                <label for="{{ form.city.id_for_label }}">City:</label>
+                {{ form.city }}
+                {% if form.city.errors %}
+                    <span class="form-error">{{ form.city.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <label for="{{ form.review_text.id_for_label }}">Review text:</label>
+                {{ form.review_text }}
+                {% if form.review_text.errors %}
+                    <span class="form-error">{{ form.review_text.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <div class="star-rating-wrapper">
+                <span class="star-rating-label">Rating score:</span>
+
+                <div class="star-rating">
+                    <input type="radio" name="rating_score" id="star5" value="5">
+                    <label for="star5" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="star4" value="4">
+                    <label for="star4" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="star3" value="3">
+                    <label for="star3" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="star2" value="2">
+                    <label for="star2" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="star1" value="1">
+                    <label for="star1" class="star">★</label>
+                </div>
+
+                {% if form.rating_score.errors %}
+                    <span class="form-error">{{ form.rating_score.errors.0 }}</span>
+                {% endif %}
+            </div>
+
             <button type="submit" class="btn btn-primary">Post Review</button>
         </form>
 
