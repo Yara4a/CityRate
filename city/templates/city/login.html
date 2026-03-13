@@ -1,1 +1,22 @@
-<h1>Login Page</h1>
+{% extends "city/base.html" %}
+
+{% block title %}Login | CityRate{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-card">
+        <h1>Login</h1>
+        <p class="form-subtitle">Welcome back! Please enter your details.</p>
+
+        <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+
+        <p class="back-link">
+            New to CityRate? <a href="{% url 'signup' %}">Sign up here</a>
+        </p>
+    </div>
+</section>
+{% endblock %}
