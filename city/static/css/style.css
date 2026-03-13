@@ -72,7 +72,7 @@ body {
     margin: 32px auto;
 }
 
-/* Hero section - only for public pages */
+/* Hero section */
 .hero {
     background: linear-gradient(135deg, #dbeafe, #eff6ff);
     padding: 40px;
@@ -95,7 +95,7 @@ body {
     margin-top: 10px;
 }
 
-/* Search section */
+/* Search */
 .search-section {
     margin-bottom: 28px;
 }
@@ -141,13 +141,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
 }
 
 .city-name {
     margin: 0;
     font-size: 1.2rem;
-    color: #111827;
 }
 
 .rating-badge {
@@ -157,7 +155,6 @@ body {
     border-radius: 999px;
     font-size: 0.9rem;
     font-weight: bold;
-    white-space: nowrap;
 }
 
 .stars {
@@ -167,8 +164,6 @@ body {
 
 .review-text {
     line-height: 1.6;
-    color: #374151;
-    margin-bottom: 0;
 }
 
 .review-meta {
@@ -182,7 +177,6 @@ body {
     margin-top: 16px;
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
 }
 
 /* Buttons */
@@ -239,17 +233,6 @@ body {
     background: #d1d5db;
 }
 
-.btn-logout {
-    background: white;
-    color: #334155;
-    border: 1px solid #dbe2ea;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-}
-
-.btn-logout:hover {
-    background: #f8fafc;
-}
-
 /* Empty state */
 .empty-state {
     background: white;
@@ -259,11 +242,10 @@ body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-/* Form pages - keep create/edit page normal */
+/* Forms */
 .form-page {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
 }
 
 .form-card {
@@ -277,16 +259,13 @@ body {
 
 .form-card h1 {
     margin-top: 0;
-    margin-bottom: 10px;
 }
 
 .form-subtitle {
     color: #6b7280;
     margin-bottom: 24px;
-    line-height: 1.5;
 }
 
-/* Django form styling */
 .styled-form p {
     margin-bottom: 18px;
 }
@@ -295,78 +274,25 @@ body {
     display: block;
     font-weight: bold;
     margin-bottom: 6px;
-    color: #374151;
 }
 
 .styled-form input,
 .styled-form textarea,
 .styled-form select {
     width: 100%;
-    margin-top: 6px;
-    padding: 12px 14px;
+    padding: 12px;
+    border-radius: 10px;
     border: 1px solid #d1d5db;
-    border-radius: 10px;
-    font-size: 1rem;
-    background: #fff;
-    outline: none;
 }
 
-.styled-form input:focus,
-.styled-form textarea:focus,
-.styled-form select:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.styled-form textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Back link */
-.back-link {
-    margin-top: 20px;
-}
-
-.back-link a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.back-link a:hover {
-    text-decoration: underline;
-}
-
-/* Delete page preview */
-.review-preview {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px 0;
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    line-height: 1.6;
-}
-
-.delete-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-
-/* Account page ONLY */
+/* Account page */
 .account-layout {
     display: flex;
     gap: 36px;
-    align-items: flex-start;
-    width: 100%;
 }
 
 .account-sidebar {
     width: 250px;
-    flex-shrink: 0;
     background: #eef2f7;
     border-radius: 20px;
     padding: 28px 20px;
@@ -382,10 +308,34 @@ body {
 .account-username {
     margin: 0 0 18px 0;
     font-size: 2.3rem;
-    line-height: 1;
     font-weight: 800;
-    color: #0f172a;
-    word-break: break-word;
+}
+
+/* NEW SIDEBAR BUTTONS */
+.account-sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.account-sidebar-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: white;
+    color: #334155;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.account-sidebar-btn:hover {
+    background: #f8fafc;
 }
 
 .account-menu {
@@ -398,38 +348,29 @@ body {
     border-radius: 14px;
     padding: 14px 16px;
     font-weight: 700;
-    color: #334155;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
 .account-menu-title.active {
     background: #1e3a5f;
     color: white;
-    border-color: #1e3a5f;
 }
 
 .account-main {
     flex: 1;
-    min-width: 0;
 }
 
 .account-page-title {
     margin: 0;
     font-size: 2.6rem;
-    line-height: 1.2;
-    font-weight: 700;
-    color: #0f172a;
 }
 
 .account-subtitle {
     margin-top: 6px;
     margin-bottom: 18px;
     color: #64748b;
-    font-size: 0.95rem;
 }
 
 .account-create-btn {
-    margin-top: 18px;
     margin-bottom: 24px;
 }
 
@@ -437,74 +378,20 @@ body {
     margin-bottom: 30px;
 }
 
-.account-main .search-input {
-    max-width: 460px;
-    background: white;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
-}
-
-.account-main .review-card {
-    border-radius: 20px;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-}
-
-.account-main .review-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
-}
-
 /* Footer */
 .site-footer {
     text-align: center;
-    padding: 24px 16px;
+    padding: 24px;
     color: #6b7280;
-    font-size: 0.9rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .nav-links {
-        width: 100%;
-    }
-
-    .review-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .hero {
-        padding: 28px;
-    }
-
-    .hero h1 {
-        font-size: 1.6rem;
-    }
-
-    .form-card {
-        padding: 24px;
-    }
-
     .account-layout {
         flex-direction: column;
-        gap: 24px;
     }
 
     .account-sidebar {
         width: 100%;
-        min-height: auto;
-        padding: 22px 18px;
-    }
-
-    .account-page-title {
-        font-size: 2rem;
-    }
-
-    .account-main .search-input {
-        max-width: 100%;
     }
 }
