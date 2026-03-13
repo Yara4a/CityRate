@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
 from .forms import PostForm
-=======
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from .forms import PostForm, CustomUserCreationForm
->>>>>>> origin/Rabindra
 from .models import Post
 
 def home(request):
@@ -97,23 +94,18 @@ def login_view(request):
     return render(request, "city/login.html", {"form": form})
 
 def signup_view(request):
-<<<<<<< HEAD
-    return render(request, "city/signup.html")
-
-=======
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Auto-login after signing up
+            login(request, user)
             return redirect("home")
     else:
         form = CustomUserCreationForm()
     return render(request, "city/signup.html", {"form": form})
 
 def logout_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         logout(request)
-        return redirect('home')
-    return redirect('home') # Redirect if accessed via GET
->>>>>>> origin/Rabindra
+        return redirect("home")
+    return redirect("home")

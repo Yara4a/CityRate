@@ -11,9 +11,16 @@
         <div class="account-user-block">
             <h2 class="account-username">{{ user.username }}</h2>
 
-            <a href="#" class="btn btn-small btn-logout">
-                Logout
-            </a>
+            <div class="account-sidebar-actions">
+                <form action="{% url 'logout' %}" method="post" class="account-action-form">
+                    {% csrf_token %}
+                    <button type="submit" class="account-sidebar-btn">Logout</button>
+                </form>
+
+                {% if user.is_superuser %}
+                    <a href="/admin/" class="account-sidebar-btn">Admin</a>
+                {% endif %}
+            </div>
         </div>
 
         <div class="account-menu">
