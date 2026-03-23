@@ -6,9 +6,7 @@
 {% block content %}
 
 <section class="form-page">
-
     <div class="form-card">
-
         <h1>Edit Review</h1>
         <p class="form-subtitle">
             Update your review for this city.
@@ -16,7 +14,49 @@
 
         <form method="post" class="styled-form">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <p>
+                <label for="{{ form.city.id_for_label }}">City:</label>
+                {{ form.city }}
+                {% if form.city.errors %}
+                    <span class="form-error">{{ form.city.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <label for="{{ form.review_text.id_for_label }}">Review text:</label>
+                {{ form.review_text }}
+                {% if form.review_text.errors %}
+                    <span class="form-error">{{ form.review_text.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            {% with selected=form.rating_score.value|stringformat:"s" %}
+            <div class="star-rating-wrapper">
+                <span class="star-rating-label">Rating score:</span>
+
+                <div class="star-rating">
+                    <input type="radio" name="rating_score" id="edit-star5" value="5" {% if selected == "5" %}checked{% endif %}>
+                    <label for="edit-star5" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="edit-star4" value="4" {% if selected == "4" %}checked{% endif %}>
+                    <label for="edit-star4" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="edit-star3" value="3" {% if selected == "3" %}checked{% endif %}>
+                    <label for="edit-star3" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="edit-star2" value="2" {% if selected == "2" %}checked{% endif %}>
+                    <label for="edit-star2" class="star">★</label>
+
+                    <input type="radio" name="rating_score" id="edit-star1" value="1" {% if selected == "1" %}checked{% endif %}>
+                    <label for="edit-star1" class="star">★</label>
+                </div>
+
+                {% if form.rating_score.errors %}
+                    <span class="form-error">{{ form.rating_score.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endwith %}
 
             <button type="submit" class="btn btn-primary">
                 Update Review
@@ -28,9 +68,7 @@
                 ← Back to reviews
             </a>
         </p>
-
     </div>
-
 </section>
 
 {% endblock %}

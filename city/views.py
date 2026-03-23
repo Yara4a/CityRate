@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse
+from .forms import PostForm, CustomUserCreationForm
 from .models import Post
 
 def home(request):
@@ -79,8 +83,30 @@ def delete_post(request, post_id):
     return render(request, "city/delete_post.html", {"post": post})
 
 def login_view(request):
-    return render(request, "city/login.html")
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect("home")
+    else:
+        form = AuthenticationForm()
+    return render(request, "city/login.html", {"form": form})
 
 def signup_view(request):
-    return render(request, "city/signup.html")
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Auto-login after signing up
+            return redirect("home")
+    else:
+        form = CustomUserCreationForm()
 
+    return render(request, "city/signup.html", {"form": form})
+    
+
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+    return redirect("home")
