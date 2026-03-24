@@ -83,6 +83,13 @@
     margin: 0 0 2rem;
   }
 
+  .draft-note {
+    margin: 0 0 1rem;
+    color: #1a5c1a;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
   .styled-form p {
     margin-bottom: 1.2rem;
   }
@@ -184,24 +191,49 @@
     color: #1a5c1a;
   }
 
-  .btn.btn-primary {
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-primary,
+  .btn-draft {
     width: 100%;
     padding: 0.85rem;
-    background: #1a5c1a;
-    color: #fff;
     border: none;
     border-radius: 10px;
     font-family: 'DM Sans', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    margin-top: 0.5rem;
     transition: background 0.2s, transform 0.1s;
     letter-spacing: 0.01em;
   }
 
-  .btn.btn-primary:hover { background: #144a14; }
-  .btn.btn-primary:active { transform: scale(0.99); }
+  .btn-primary {
+    background: #1a5c1a;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #144a14;
+  }
+
+  .btn-draft {
+    background: #eef2e6;
+    color: #1a5c1a;
+  }
+
+  .btn-draft:hover {
+    background: #e1e7d4;
+  }
+
+  .btn-primary:active,
+  .btn-draft:active {
+    transform: scale(0.99);
+  }
 
   .back-link {
     text-align: center;
@@ -216,7 +248,9 @@
     text-decoration: none;
   }
 
-  .back-link a:hover { text-decoration: underline; }
+  .back-link a:hover {
+    text-decoration: underline;
+  }
 </style>
 
 <section class="form-page">
@@ -224,8 +258,13 @@
         <h1>Create Review</h1>
         <p class="form-subtitle">Share your travel experience with other users.</p>
 
-        <form method="post" class="styled-form">
+        {% if draft_saved %}
+            <p class="draft-note">Draft saved.</p>
+        {% endif %}
+
+        <form method="post" class="styled-form" id="createReviewForm">
             {% csrf_token %}
+            <input type="hidden" name="draft_id" id="draft_id" value="{{ draft_id }}">
 
             <p>
                 <label for="{{ form.city_name.id_for_label }}">City:</label>
@@ -276,7 +315,10 @@
                 {% endif %}
             </div>
 
-            <button type="submit" class="btn btn-primary">Post Review</button>
+            <div class="form-actions">
+                <button type="submit" name="action" value="post" class="btn-primary">Post Review</button>
+                <button type="submit" name="action" value="draft" class="btn-draft">Save to Draft</button>
+            </div>
         </form>
 
         <p class="back-link">

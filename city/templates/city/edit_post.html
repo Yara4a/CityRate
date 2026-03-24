@@ -184,24 +184,49 @@
     color: #1a5c1a;
   }
 
-  .btn.btn-primary {
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-primary,
+  .btn-draft {
     width: 100%;
     padding: 0.85rem;
-    background: #1a5c1a;
-    color: #fff;
     border: none;
     border-radius: 10px;
     font-family: 'DM Sans', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    margin-top: 0.5rem;
     transition: background 0.2s, transform 0.1s;
     letter-spacing: 0.01em;
   }
 
-  .btn.btn-primary:hover { background: #144a14; }
-  .btn.btn-primary:active { transform: scale(0.99); }
+  .btn-primary {
+    background: #1a5c1a;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #144a14;
+  }
+
+  .btn-draft {
+    background: #eef2e6;
+    color: #1a5c1a;
+  }
+
+  .btn-draft:hover {
+    background: #e1e7d4;
+  }
+
+  .btn-primary:active,
+  .btn-draft:active {
+    transform: scale(0.99);
+  }
 
   .back-link {
     text-align: center;
@@ -216,13 +241,21 @@
     text-decoration: none;
   }
 
-  .back-link a:hover { text-decoration: underline; }
+  .back-link a:hover {
+    text-decoration: underline;
+  }
 </style>
 
 <section class="form-page">
     <div class="form-card">
-        <h1>Edit Review</h1>
-        <p class="form-subtitle">Update your review for this city.</p>
+        <h1>{% if post.is_draft %}Edit Draft{% else %}Edit Review{% endif %}</h1>
+        <p class="form-subtitle">
+            {% if post.is_draft %}
+                Update your draft before posting it.
+            {% else %}
+                Update your review for this city.
+            {% endif %}
+        </p>
 
         <form method="post" class="styled-form">
             {% csrf_token %}
@@ -278,11 +311,20 @@
             </div>
             {% endwith %}
 
-            <button type="submit" class="btn btn-primary">Update Review</button>
+            <div class="form-actions">
+                {% if post.is_draft %}
+                    <button type="submit" name="action" value="publish" class="btn-primary">Post Draft</button>
+                    <button type="submit" name="action" value="draft" class="btn-draft">Save Draft Changes</button>
+                {% else %}
+                    <button type="submit" name="action" value="update" class="btn-primary">Update Review</button>
+                {% endif %}
+            </div>
         </form>
 
         <p class="back-link">
-            <a href="{% url 'account_page' %}">← Back to my account</a>
+            <a href="{% url 'account_page' %}{% if post.is_draft %}?tab=draft{% endif %}">
+                ← Back to my account
+            </a>
         </p>
     </div>
 </section>

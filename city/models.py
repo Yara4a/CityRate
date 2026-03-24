@@ -19,11 +19,18 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="posts")
 
-    review_text = models.TextField()
+    review_text = models.TextField(blank=True)
     rating_score = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        null=True,
+        blank=True,
     )
+
+    is_draft = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.city.city_name} - {self.rating_score}/5"
+        status = "Draft" if self.is_draft else "Post"
+        rating = self.rating_score if self.rating_score is not None else "-"
+        return f"{self.city.city_name} - {rating}/5 ({status})"

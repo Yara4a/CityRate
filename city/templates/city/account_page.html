@@ -89,12 +89,10 @@
                             by {{ r.user.username }} — {{ r.created_at }}
                         </small>
 
-                        {% if user.is_authenticated and r.user == user %}
-                            <div class="review-actions">
-                                <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
-                                <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
-                            </div>
-                        {% endif %}
+                        <div class="review-actions">
+                            <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
+                            <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
+                        </div>
                     </div>
 
                 {% empty %}
@@ -118,11 +116,57 @@
                 </a>
             </div>
 
+            <section class="search-section account-search">
+                <form method="get" action="{% url 'account_page' %}">
+                    <input type="hidden" name="tab" value="draft">
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ search_query }}"
+                        placeholder="Search drafts..."
+                        class="search-input"
+                    >
+                </form>
+            </section>
+
             <section class="reviews-section">
                 {% for draft in drafts %}
                     <div class="review-card">
-                        <h3 class="city-name">{{ draft.title }}</h3>
-                        <p class="review-text">{{ draft.content }}</p>
+                        <div class="review-top">
+                            <h3 class="city-name">{{ draft.city.city_name }}</h3>
+                            <span class="rating-badge">{{ draft.city.country }}</span>
+                        </div>
+
+                        <div class="stars">
+                            {% if draft.rating_score %}
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= draft.rating_score %}
+                                        <span>⭐</span>
+                                    {% else %}
+                                        <span>☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <span>Not rated yet</span>
+                            {% endif %}
+                        </div>
+
+                        <p class="review-text">{{ draft.review_text|default:"No draft content yet." }}</p>
+
+                        <small class="review-meta">
+                            created {{ draft.created_at }}{% if draft.updated_at %} — last edited {{ draft.updated_at }}{% endif %}
+                        </small>
+
+                        <div class="review-actions">
+                            <a href="{% url 'edit_post' draft.id %}" class="btn btn-small btn-edit">Edit</a>
+
+                            <form action="{% url 'publish_draft' draft.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-small btn-primary">Post</button>
+                            </form>
+
+                            <a href="{% url 'delete_post' draft.id %}" class="btn btn-small btn-delete">Delete</a>
+                        </div>
                     </div>
                 {% empty %}
                     <div class="empty-state">

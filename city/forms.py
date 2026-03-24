@@ -35,7 +35,8 @@ class PostForm(forms.ModelForm):
         choices=STAR_CHOICES,
         coerce=int,
         widget=forms.RadioSelect,
-        label="Rating score"
+        label="Rating score",
+        required=False,
     )
 
     class Meta:
@@ -43,7 +44,10 @@ class PostForm(forms.ModelForm):
         fields = ["city_name", "country", "review_text", "rating_score"]
 
     def clean_rating_score(self):
-        rating = self.cleaned_data["rating_score"]
+        rating = self.cleaned_data.get("rating_score")
+
+        if rating in (None, ""):
+            return None
 
         if rating < 1 or rating > 5:
             raise forms.ValidationError("Rating must be between 1 and 5.")
