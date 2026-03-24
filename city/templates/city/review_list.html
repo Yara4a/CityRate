@@ -22,22 +22,26 @@
   .hero::before {
     content: '';
     position: absolute;
-    width: 500px; height: 500px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
     background: #e8e8b0;
     opacity: 0.07;
-    top: -200px; right: -100px;
+    top: -200px;
+    right: -100px;
     pointer-events: none;
   }
 
   .hero::after {
     content: '';
     position: absolute;
-    width: 300px; height: 300px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     background: #e8e8b0;
     opacity: 0.05;
-    bottom: -120px; left: -60px;
+    bottom: -120px;
+    left: -60px;
     pointer-events: none;
   }
 
@@ -79,8 +83,13 @@
     transition: background 0.2s, transform 0.1s;
   }
 
-  .hero-actions .btn.btn-primary:hover { background: #dada98; }
-  .hero-actions .btn.btn-primary:active { transform: scale(0.98); }
+  .hero-actions .btn.btn-primary:hover {
+    background: #dada98;
+  }
+
+  .hero-actions .btn.btn-primary:active {
+    transform: scale(0.98);
+  }
 
   .search-section {
     background: #fff;
@@ -90,13 +99,18 @@
     justify-content: center;
   }
 
-  .search-section form {
+  .search-form {
     width: 100%;
-    max-width: 520px;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .search-input {
-    width: 100%;
+    flex: 1;
+    min-width: 240px;
     padding: 0.7rem 1.1rem 0.7rem 2.8rem;
     border: 1.5px solid #e0e0d0;
     border-radius: 10px;
@@ -111,6 +125,28 @@
   .search-input:focus {
     border-color: #1a5c1a;
     background-color: #fff;
+  }
+
+  .clear-search-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #eef2e6;
+    color: #1a5c1a;
+    padding: 0.72rem 1rem;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .clear-search-btn:hover {
+    background: #e1e7d4;
+  }
+
+  .clear-search-btn:active {
+    transform: scale(0.98);
   }
 
   .reviews-section {
@@ -199,7 +235,10 @@
     font-family: 'DM Sans', sans-serif;
   }
 
-  .empty-state p { margin: 0 0 1.2rem; font-size: 1rem; }
+  .empty-state p {
+    margin: 0 0 1.2rem;
+    font-size: 1rem;
+  }
 
   .empty-state .btn.btn-primary {
     display: inline-block;
@@ -216,7 +255,20 @@
     transition: background 0.2s;
   }
 
-  .empty-state .btn.btn-primary:hover { background: #144a14; }
+  .empty-state .btn.btn-primary:hover {
+    background: #144a14;
+  }
+
+  @media (max-width: 640px) {
+    .search-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .clear-search-btn {
+      text-align: center;
+    }
+  }
 </style>
 
 <section class="hero">
@@ -231,14 +283,19 @@
 </section>
 
 <section class="search-section">
-    <form method="get">
+    <form method="get" action="{% url 'review_list' %}" class="search-form">
         <input
             type="text"
+            id="citySearch"
             name="q"
             value="{{ search_query }}"
             placeholder="Search by city..."
             class="search-input"
         >
+
+        {% if search_query %}
+            <a href="{% url 'review_list' %}" class="clear-search-btn">Clear</a>
+        {% endif %}
     </form>
 </section>
 

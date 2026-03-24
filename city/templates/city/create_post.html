@@ -24,22 +24,26 @@
   .form-page::before {
     content: '';
     position: absolute;
-    width: 400px; height: 400px;
+    width: 400px;
+    height: 400px;
     border-radius: 50%;
     background: #1a5c1a;
     opacity: 0.06;
-    top: -120px; left: -100px;
+    top: -120px;
+    left: -100px;
     pointer-events: none;
   }
 
   .form-page::after {
     content: '';
     position: absolute;
-    width: 260px; height: 260px;
+    width: 260px;
+    height: 260px;
     border-radius: 50%;
     background: #1a5c1a;
     opacity: 0.06;
-    bottom: -60px; right: -60px;
+    bottom: -60px;
+    right: -60px;
     pointer-events: none;
   }
 
@@ -48,7 +52,7 @@
     border-radius: 20px;
     padding: 3rem 2.5rem;
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     box-shadow: 0 4px 40px rgba(26, 92, 26, 0.10);
     position: relative;
     z-index: 1;
@@ -59,7 +63,9 @@
     height: 4px;
     background: #e8e8b0;
     position: absolute;
-    top: 0; left: 2.5rem; right: 2.5rem;
+    top: 0;
+    left: 2.5rem;
+    right: 2.5rem;
     border-radius: 0 0 8px 8px;
   }
 
@@ -139,7 +145,6 @@
     margin-top: 0.3rem;
   }
 
-  /* Star rating */
   .star-rating-wrapper {
     margin-bottom: 1.5rem;
   }
@@ -223,10 +228,18 @@
             {% csrf_token %}
 
             <p>
-                <label for="{{ form.city.id_for_label }}">City:</label>
-                {{ form.city }}
-                {% if form.city.errors %}
-                    <span class="form-error">{{ form.city.errors.0 }}</span>
+                <label for="{{ form.city_name.id_for_label }}">City:</label>
+                {{ form.city_name }}
+                {% if form.city_name.errors %}
+                    <span class="form-error">{{ form.city_name.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <label for="{{ form.country.id_for_label }}">Country:</label>
+                {{ form.country }}
+                {% if form.country.errors %}
+                    <span class="form-error">{{ form.country.errors.0 }}</span>
                 {% endif %}
             </p>
 
@@ -242,19 +255,19 @@
                 <span class="star-rating-label">Rating score:</span>
 
                 <div class="star-rating">
-                    <input type="radio" name="rating_score" id="star5" value="5">
+                    <input type="radio" name="rating_score" id="star5" value="5" {% if form.rating_score.value == "5" or form.rating_score.value == 5 %}checked{% endif %}>
                     <label for="star5" class="star">★</label>
 
-                    <input type="radio" name="rating_score" id="star4" value="4">
+                    <input type="radio" name="rating_score" id="star4" value="4" {% if form.rating_score.value == "4" or form.rating_score.value == 4 %}checked{% endif %}>
                     <label for="star4" class="star">★</label>
 
-                    <input type="radio" name="rating_score" id="star3" value="3">
+                    <input type="radio" name="rating_score" id="star3" value="3" {% if form.rating_score.value == "3" or form.rating_score.value == 3 %}checked{% endif %}>
                     <label for="star3" class="star">★</label>
 
-                    <input type="radio" name="rating_score" id="star2" value="2">
+                    <input type="radio" name="rating_score" id="star2" value="2" {% if form.rating_score.value == "2" or form.rating_score.value == 2 %}checked{% endif %}>
                     <label for="star2" class="star">★</label>
 
-                    <input type="radio" name="rating_score" id="star1" value="1">
+                    <input type="radio" name="rating_score" id="star1" value="1" {% if form.rating_score.value == "1" or form.rating_score.value == 1 %}checked{% endif %}>
                     <label for="star1" class="star">★</label>
                 </div>
 

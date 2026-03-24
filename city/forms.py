@@ -2,6 +2,13 @@ from django import forms
 from .models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+import pycountry
+
+
+COUNTRY_CHOICES = sorted(
+    [(country.name, country.name) for country in pycountry.countries],
+    key=lambda x: x[0]
+)
 
 
 class PostForm(forms.ModelForm):
@@ -13,6 +20,17 @@ class PostForm(forms.ModelForm):
         (5, "5 Stars"),
     ]
 
+    city_name = forms.CharField(
+        max_length=120,
+        label="City",
+        widget=forms.TextInput(attrs={"placeholder": "Enter city name"})
+    )
+
+    country = forms.ChoiceField(
+        choices=COUNTRY_CHOICES,
+        label="Country"
+    )
+
     rating_score = forms.TypedChoiceField(
         choices=STAR_CHOICES,
         coerce=int,
@@ -22,7 +40,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["city", "review_text", "rating_score"]
+        fields = ["city_name", "country", "review_text", "rating_score"]
 
     def clean_rating_score(self):
         rating = self.cleaned_data["rating_score"]

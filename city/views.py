@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import PostForm, CustomUserCreationForm
-from .models import Post
+from .models import Post, City
 
 
 def home(request):
@@ -15,8 +15,23 @@ def create_post(request):
     form = PostForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
+        city_name = form.cleaned_data["city_name"].strip()
+        country = form.cleaned_data["country"].strip()
+
+        city = City.objects.filter(
+            city_name__iexact=city_name,
+            country__iexact=country
+        ).first()
+
+        if not city:
+            city = City.objects.create(
+                city_name=city_name,
+                country=country
+            )
+
         post = form.save(commit=False)
         post.user = request.user
+        post.city = city
         post.save()
         return redirect("account_page")
 
@@ -74,10 +89,37 @@ def account_page(request):
 @login_required(login_url="login")
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id, user=request.user)
-    form = PostForm(request.POST or None, instance=post)
+
+    form = PostForm(
+        request.POST or None,
+        initial={
+            "city_name": post.city.city_name,
+            "country": post.city.country,
+            "review_text": post.review_text,
+            "rating_score": post.rating_score,
+        }
+    )
 
     if request.method == "POST" and form.is_valid():
-        form.save()
+        city_name = form.cleaned_data["city_name"].strip()
+        country = form.cleaned_data["country"].strip()
+
+        city = City.objects.filter(
+            city_name__iexact=city_name,
+            country__iexact=country
+        ).first()
+
+        if not city:
+            city = City.objects.create(
+                city_name=city_name,
+                country=country
+            )
+
+        post.city = city
+        post.review_text = form.cleaned_data["review_text"]
+        post.rating_score = form.cleaned_data["rating_score"]
+        post.save()
+
         return redirect("account_page")
 
     return render(request, "city/edit_post.html", {"form": form})
