@@ -116,11 +116,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
-<<<<<<< HEAD
 LOGIN_URL = "/cityrate/login/"
 LOGIN_REDIRECT_URL = "home"
-=======
-STATIC_ROOT = "/home/Yara4a/CityRate/staticfiles"
-LOGIN_URL = "/login/"
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
->>>>>>> Yara
