@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
 from .forms import PostForm, CustomUserCreationForm
 from .models import Post
 
+
 def home(request):
     return render(request, "city/homepage.html")
+
 
 @login_required(login_url="login")
 def create_post(request):
@@ -40,25 +40,36 @@ def review_list(request):
         },
     )
 
+
 @login_required(login_url="login")
 def account_page(request):
     search_query = request.GET.get("q", "").strip()
+    active_tab = request.GET.get("tab", "account")
 
-    reviews = Post.objects.select_related("city", "user").filter(
+    all_reviews = Post.objects.select_related("city", "user").filter(
         user=request.user
     ).order_by("-created_at")
 
-    if search_query:
+    review_count = all_reviews.count()
+
+    reviews = all_reviews
+    if search_query and active_tab == "account":
         reviews = reviews.filter(city__city_name__icontains=search_query)
+
+    drafts = []
 
     return render(
         request,
         "city/account_page.html",
         {
             "reviews": reviews,
+            "drafts": drafts,
             "search_query": search_query,
+            "active_tab": active_tab,
+            "review_count": review_count,
         },
     )
+
 
 @login_required(login_url="login")
 def edit_post(request, post_id):
@@ -82,6 +93,7 @@ def delete_post(request, post_id):
 
     return render(request, "city/delete_post.html", {"post": post})
 
+
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
@@ -91,20 +103,22 @@ def login_view(request):
             return redirect("home")
     else:
         form = AuthenticationForm()
+
     return render(request, "city/login.html", {"form": form})
+
 
 def signup_view(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Auto-login after signing up
+            login(request, user)
             return redirect("home")
     else:
         form = CustomUserCreationForm()
 
     return render(request, "city/signup.html", {"form": form})
-    
+
 
 def logout_view(request):
     if request.method == "POST":

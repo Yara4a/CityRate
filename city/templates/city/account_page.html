@@ -4,98 +4,134 @@
 {% block title %}My Account | CityRate{% endblock %}
 
 {% block content %}
-
 <section class="account-layout">
 
     <aside class="account-sidebar">
         <div class="account-user-block">
             <h2 class="account-username">{{ user.username }}</h2>
+            <p class="account-email">{{ user.email }}</p>
 
-            <div class="account-sidebar-actions">
-                <form action="{% url 'logout' %}" method="post" class="account-action-form">
-                    {% csrf_token %}
-                    <button type="submit" class="account-sidebar-btn">Logout</button>
-                </form>
-
-                {% if user.is_superuser %}
-                    <a href="/admin/" class="account-sidebar-btn">Admin</a>
-                {% endif %}
-            </div>
+            <p class="review-count">
+                Number of reviews: {{ review_count }}
+            </p>
         </div>
 
         <div class="account-menu">
-            <div class="account-menu-title active">My Account</div>
+            <a
+                href="{% url 'account_page' %}?tab=account"
+                class="account-menu-title {% if active_tab == 'account' %}active{% endif %}"
+            >
+                My Account
+            </a>
+
+            <a
+                href="{% url 'account_page' %}?tab=draft"
+                class="account-menu-title {% if active_tab == 'draft' %}active{% endif %}"
+            >
+                Draft
+            </a>
+
+            <form action="{% url 'logout' %}" method="post" class="account-action-form">
+                {% csrf_token %}
+                <button type="submit" class="account-menu-title logout-menu-btn">
+                    Logout
+                </button>
+            </form>
         </div>
     </aside>
 
     <section class="account-main">
-        <h1 class="account-page-title">My Account</h1>
-        <p class="account-subtitle">Manage your reviews and travel posts.</p>
 
-        <div class="hero-actions account-create-btn">
-            <a href="{% url 'create_post' %}" class="btn btn-primary">
-                Create a New Review
-            </a>
-        </div>
+        {% if active_tab == "account" %}
+            <h1 class="account-page-title">My Account</h1>
+            <p class="account-subtitle">Manage your reviews and travel posts.</p>
 
-        <section class="search-section account-search">
-            <form method="get">
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ search_query }}"
-                    placeholder="Search..."
-                    class="search-input"
-                >
-            </form>
-        </section>
+            <div class="hero-actions account-create-btn">
+                <a href="{% url 'create_post' %}" class="btn btn-primary">
+                    Create a New Review
+                </a>
+            </div>
 
-        <section class="reviews-section">
-            {% for r in reviews %}
-                <div class="review-card">
+            <section class="search-section account-search">
+                <form method="get" action="{% url 'account_page' %}">
+                    <input type="hidden" name="tab" value="account">
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ search_query }}"
+                        placeholder="Search..."
+                        class="search-input"
+                    >
+                </form>
+            </section>
 
-                    <div class="review-top">
-                        <h3 class="city-name">{{ r.city.city_name }}</h3>
-                        <span class="rating-badge">{{ r.rating_score }}/5</span>
-                    </div>
-
-                    <div class="stars">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= r.rating_score %}
-                                <span>⭐</span>
-                            {% else %}
-                                <span>☆</span>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    <p class="review-text">
-                        {{ r.review_text }}
-                    </p>
-
-                    <small class="review-meta">
-                        by {{ r.user.username }} — {{ r.created_at }}
-                    </small>
-
-                    {% if user.is_authenticated and r.user == user %}
-                        <div class="review-actions">
-                            <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
-                            <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
+            <section class="reviews-section">
+                {% for r in reviews %}
+                    <div class="review-card">
+                        <div class="review-top">
+                            <h3 class="city-name">{{ r.city.city_name }}</h3>
+                            <span class="rating-badge">{{ r.rating_score }}/5</span>
                         </div>
-                    {% endif %}
-                </div>
 
-            {% empty %}
-                <div class="empty-state">
-                    <p>You haven't posted any reviews yet.</p>
-                    <a href="{% url 'create_post' %}" class="btn btn-primary">
-                        Create your first review
-                    </a>
-                </div>
-            {% endfor %}
-        </section>
+                        <div class="stars">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= r.rating_score %}
+                                    <span>⭐</span>
+                                {% else %}
+                                    <span>☆</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <p class="review-text">{{ r.review_text }}</p>
+
+                        <small class="review-meta">
+                            by {{ r.user.username }} — {{ r.created_at }}
+                        </small>
+
+                        {% if user.is_authenticated and r.user == user %}
+                            <div class="review-actions">
+                                <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
+                                <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                {% empty %}
+                    <div class="empty-state">
+                        <p>You haven't posted any reviews yet.</p>
+                        <a href="{% url 'create_post' %}" class="btn btn-primary">
+                            Create your first review
+                        </a>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        {% if active_tab == "draft" %}
+            <h1 class="account-page-title">Draft</h1>
+            <p class="account-subtitle">Here are your saved drafts.</p>
+
+            <div class="hero-actions account-create-btn">
+                <a href="{% url 'create_post' %}" class="btn btn-primary">
+                    Create a New Draft
+                </a>
+            </div>
+
+            <section class="reviews-section">
+                {% for draft in drafts %}
+                    <div class="review-card">
+                        <h3 class="city-name">{{ draft.title }}</h3>
+                        <p class="review-text">{{ draft.content }}</p>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        <p>You don't have any drafts yet.</p>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
     </section>
-
 </section>
-
 {% endblock %}

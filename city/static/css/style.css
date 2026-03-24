@@ -33,8 +33,10 @@ body {
 }
 
 .logo img {
-    height: 200px;
-    width: auto;
+    height: 36px;
+    width: 36px;
+    object-fit: cover;
+    border-radius: 8px;
     display: block;
 }
 
@@ -63,6 +65,8 @@ body {
     padding: 8px 14px;
     border-radius: 8px;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
 }
 
 /* Main page container */
@@ -120,63 +124,77 @@ body {
 .reviews-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 22px;
 }
 
 /* Review card */
 .review-card {
     background: white;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
 }
 
 .review-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
 }
 
 .city-name {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #163d2a;
+    letter-spacing: -0.02em;
 }
 
 .rating-badge {
     background: #e0f2fe;
     color: #0369a1;
-    padding: 6px 10px;
+    padding: 7px 11px;
     border-radius: 999px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .stars {
-    margin: 12px 0;
-    font-size: 1.1rem;
+    margin: 8px 0 14px 0;
+    font-size: 1.15rem;
 }
 
 .review-text {
-    line-height: 1.6;
+    line-height: 1.75;
+    font-size: 1rem;
+    color: #374151;
+    margin: 0 0 16px 0;
+    min-height: 56px;
 }
 
 .review-meta {
     display: block;
-    margin-top: 16px;
+    margin-top: 0;
+    padding-top: 14px;
+    border-top: 1px solid #eceff3;
     color: #6b7280;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
 }
 
 .review-actions {
     margin-top: 16px;
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 /* Buttons */
@@ -202,13 +220,15 @@ body {
 }
 
 .btn-small {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 9px 14px;
+    font-size: 0.88rem;
+    border-radius: 10px;
 }
 
 .btn-edit {
     background: #facc15;
     color: #1f2937;
+    box-shadow: 0 3px 8px rgba(250, 204, 21, 0.25);
 }
 
 .btn-edit:hover {
@@ -218,6 +238,7 @@ body {
 .btn-delete {
     background: #ef4444;
     color: white;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.22);
 }
 
 .btn-delete:hover {
@@ -305,7 +326,6 @@ body {
     font-size: 0.9rem;
 }
 
-
 /* Star rating */
 .star-rating-wrapper {
     margin-bottom: 22px;
@@ -354,85 +374,109 @@ body {
 .account-layout {
     display: flex;
     gap: 36px;
+    align-items: flex-start;
 }
 
 .account-sidebar {
-    width: 250px;
-    background: #eef2f7;
-    border-radius: 20px;
-    padding: 28px 20px;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    width: 260px;
+    min-height: 500px;
+    background: linear-gradient(180deg, #eef2f7, #e2e8f0);
+    border-radius: 24px;
+    padding: 28px 22px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .account-user-block {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #d8dee8;
+    margin-bottom: 20px;
 }
 
 .account-username {
-    margin: 0 0 18px 0;
+    margin: 0 0 8px 0;
     font-size: 2.3rem;
     font-weight: 800;
+    line-height: 1.1;
 }
 
-/* NEW SIDEBAR BUTTONS */
-.account-sidebar-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.account-sidebar-btn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: white;
-    color: #334155;
-    border: 1px solid #dbe2ea;
-    border-radius: 10px;
-    padding: 10px 16px;
+.account-email {
+    margin: 0 0 12px 0;
+    color: #64748b;
     font-size: 0.95rem;
-    font-weight: bold;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.2s ease;
+    word-break: break-word;
 }
 
-.account-sidebar-btn:hover {
-    background: #f8fafc;
+.review-count {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 10px;
+    font-weight: 600;
 }
 
 .account-menu {
-    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .account-menu-title {
+    display: block;
+    width: 100%;
     background: white;
-    border: 1px solid #dbe2ea;
-    border-radius: 14px;
+    border: none;
+    border-radius: 16px;
     padding: 14px 16px;
     font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    color: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.account-menu-title:hover {
+    transform: translateY(-2px);
+    background: #f8fafc;
 }
 
 .account-menu-title.active {
     background: #1e3a5f;
     color: white;
+    box-shadow: 0 6px 16px rgba(30, 58, 95, 0.3);
+}
+
+.account-action-form {
+    margin: 0;
+    width: 100%;
+}
+
+.logout-menu-btn {
+    font-family: inherit;
 }
 
 .account-main {
     flex: 1;
+    min-width: 0;
 }
 
 .account-page-title {
     margin: 0;
     font-size: 2.6rem;
+    line-height: 1.15;
 }
 
 .account-subtitle {
     margin-top: 6px;
     margin-bottom: 18px;
     color: #64748b;
+    line-height: 1.5;
 }
 
 .account-create-btn {
@@ -458,6 +502,7 @@ body {
 
     .account-sidebar {
         width: 100%;
+        min-height: auto;
     }
 
     .review-top {
@@ -467,7 +512,7 @@ body {
     }
 }
 
-/* Star rating */
+/* Star rating buttons */
 .star-rating {
     display: flex;
     gap: 6px;
