@@ -27,10 +27,17 @@ body {
 }
 
 .logo {
-    color: white;
+    display: inline-flex;
+    align-items: center;
     text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
+}
+
+.logo img {
+    height: 36px;
+    width: 36px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
 }
 
 .nav-links {
@@ -47,7 +54,8 @@ body {
     font-size: 0.95rem;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-user:hover {
     opacity: 0.85;
 }
 
@@ -57,6 +65,8 @@ body {
     padding: 8px 14px;
     border-radius: 8px;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
 }
 
 /* Main page container */
@@ -89,7 +99,7 @@ body {
     margin-top: 10px;
 }
 
-/* Search section */
+/* Search */
 .search-section {
     margin-bottom: 28px;
 }
@@ -114,62 +124,70 @@ body {
 .reviews-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 22px;
 }
 
 /* Review card */
 .review-card {
     background: white;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
 }
 
 .review-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
 }
 
 .city-name {
     margin: 0;
-    font-size: 1.2rem;
-    color: #111827;
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #163d2a;
+    letter-spacing: -0.02em;
 }
 
 .rating-badge {
     background: #e0f2fe;
     color: #0369a1;
-    padding: 6px 10px;
+    padding: 7px 11px;
     border-radius: 999px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 0.95rem;
+    font-weight: 700;
     white-space: nowrap;
 }
 
 .stars {
-    margin: 12px 0;
-    font-size: 1.1rem;
+    margin: 8px 0 14px 0;
+    font-size: 1.15rem;
 }
 
 .review-text {
-    line-height: 1.6;
+    line-height: 1.75;
+    font-size: 1rem;
     color: #374151;
-    margin-bottom: 0;
+    margin: 0 0 16px 0;
+    min-height: 56px;
 }
 
 .review-meta {
     display: block;
-    margin-top: 16px;
+    margin-top: 0;
+    padding-top: 14px;
+    border-top: 1px solid #eceff3;
     color: #6b7280;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
 }
 
 .review-actions {
@@ -202,13 +220,15 @@ body {
 }
 
 .btn-small {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 9px 14px;
+    font-size: 0.88rem;
+    border-radius: 10px;
 }
 
 .btn-edit {
     background: #facc15;
     color: #1f2937;
+    box-shadow: 0 3px 8px rgba(250, 204, 21, 0.25);
 }
 
 .btn-edit:hover {
@@ -218,6 +238,7 @@ body {
 .btn-delete {
     background: #ef4444;
     color: white;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.22);
 }
 
 .btn-delete:hover {
@@ -242,11 +263,10 @@ body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-/* Form pages */
+/* Forms */
 .form-page {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
 }
 
 .form-card {
@@ -260,16 +280,13 @@ body {
 
 .form-card h1 {
     margin-top: 0;
-    margin-bottom: 10px;
 }
 
 .form-subtitle {
     color: #6b7280;
     margin-bottom: 24px;
-    line-height: 1.5;
 }
 
-/* Django form styling */
 .styled-form p {
     margin-bottom: 18px;
 }
@@ -278,100 +295,241 @@ body {
     display: block;
     font-weight: bold;
     margin-bottom: 6px;
-    color: #374151;
 }
 
 .styled-form input,
 .styled-form textarea,
 .styled-form select {
     width: 100%;
-    margin-top: 6px;
-    padding: 12px 14px;
-    border: 1px solid #d1d5db;
+    padding: 12px;
     border-radius: 10px;
-    font-size: 1rem;
-    background: #fff;
-    outline: none;
+    border: 1px solid #d1d5db;
+}
+
+.styled-form textarea {
+    min-height: 140px;
+    resize: vertical;
 }
 
 .styled-form input:focus,
 .styled-form textarea:focus,
 .styled-form select:focus {
+    outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.styled-form textarea {
-    min-height: 120px;
-    resize: vertical;
+.form-error {
+    display: block;
+    margin-top: 6px;
+    color: #dc2626;
+    font-size: 0.9rem;
 }
 
-/* Back link */
-.back-link {
-    margin-top: 20px;
+/* Star rating */
+.star-rating-wrapper {
+    margin-bottom: 22px;
 }
 
-.back-link a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
+.star-rating-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.back-link a:hover {
-    text-decoration: underline;
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 4px;
 }
 
-/* Delete page preview */
-.review-preview {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px 0;
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    line-height: 1.6;
+.star-rating input[type="radio"] {
+    display: none;
 }
 
-.delete-actions {
+.star-rating .star {
+    width: auto;
+    display: inline-block;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: #d1d5db;
+    cursor: pointer;
+    margin-bottom: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.star-rating .star:hover,
+.star-rating .star:hover ~ .star {
+    color: #facc15;
+    transform: scale(1.05);
+}
+
+.star-rating input[type="radio"]:checked + .star,
+.star-rating input[type="radio"]:checked + .star ~ .star {
+    color: #facc15;
+}
+
+/* Account page */
+.account-layout {
     display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
+    gap: 36px;
+    align-items: flex-start;
+}
+
+.account-sidebar {
+    width: 260px;
+    min-height: 500px;
+    background: linear-gradient(180deg, #eef2f7, #e2e8f0);
+    border-radius: 24px;
+    padding: 28px 22px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.account-user-block {
+    margin-bottom: 20px;
+}
+
+.account-username {
+    margin: 0 0 8px 0;
+    font-size: 2.3rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.account-email {
+    margin: 0 0 12px 0;
+    color: #64748b;
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+.review-count {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.account-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.account-menu-title {
+    display: block;
+    width: 100%;
+    background: white;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    color: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.account-menu-title:hover {
+    transform: translateY(-2px);
+    background: #f8fafc;
+}
+
+.account-menu-title.active {
+    background: #1e3a5f;
+    color: white;
+    box-shadow: 0 6px 16px rgba(30, 58, 95, 0.3);
+}
+
+.account-action-form {
+    margin: 0;
+    width: 100%;
+}
+
+.logout-menu-btn {
+    font-family: inherit;
+}
+
+.account-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.account-page-title {
+    margin: 0;
+    font-size: 2.6rem;
+    line-height: 1.15;
+}
+
+.account-subtitle {
+    margin-top: 6px;
+    margin-bottom: 18px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.account-create-btn {
+    margin-bottom: 24px;
+}
+
+.account-search {
+    margin-bottom: 30px;
 }
 
 /* Footer */
 .site-footer {
     text-align: center;
-    padding: 24px 16px;
+    padding: 24px;
     color: #6b7280;
-    font-size: 0.9rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .nav-container {
+    .account-layout {
         flex-direction: column;
-        align-items: flex-start;
     }
 
-    .nav-links {
+    .account-sidebar {
         width: 100%;
+        min-height: auto;
     }
 
     .review-top {
         flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
     }
+}
 
-    .hero {
-        padding: 28px;
-    }
+/* Star rating buttons */
+.star-rating {
+    display: flex;
+    gap: 6px;
+    margin: 8px 0 18px 0;
+}
 
-    .hero h1 {
-        font-size: 1.6rem;
-    }
+.star {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 30px;
+    cursor: pointer;
+    color: #d1d5db;
+    transition: color 0.15s ease;
+}
 
-    .form-card {
-        padding: 24px;
-    }
+.star.active,
+.star.hover {
+    color: #fbbf24;
 }

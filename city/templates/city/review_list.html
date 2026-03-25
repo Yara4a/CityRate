@@ -5,17 +5,298 @@
 
 {% block content %}
 
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  .hero {
+    background: #1a5c1a;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: #e8e8b0;
+    opacity: 0.07;
+    top: -200px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: #e8e8b0;
+    opacity: 0.05;
+    bottom: -120px;
+    left: -60px;
+    pointer-events: none;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 0.6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero p {
+    color: #c8dfc8;
+    font-size: 1rem;
+    margin: 0 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-actions {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-actions .btn.btn-primary {
+    display: inline-block;
+    padding: 0.75rem 1.8rem;
+    background: #e8e8b0;
+    color: #1a5c1a;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .hero-actions .btn.btn-primary:hover {
+    background: #dada98;
+  }
+
+  .hero-actions .btn.btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .search-section {
+    background: #fff;
+    border-bottom: 1px solid #e8e8d8;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .search-form {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.7rem 1.1rem 0.7rem 2.8rem;
+    border: 1.5px solid #e0e0d0;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: #fafaf4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a5c1a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 0.85rem center;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    color: #222;
+  }
+
+  .search-input:focus {
+    border-color: #1a5c1a;
+    background-color: #fff;
+  }
+
+  .clear-search-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #eef2e6;
+    color: #1a5c1a;
+    padding: 0.72rem 1rem;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .clear-search-btn:hover {
+    background: #e1e7d4;
+  }
+
+  .clear-search-btn:active {
+    transform: scale(0.98);
+  }
+
+  .reviews-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .review-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid #eaeada;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .review-card:hover {
+    box-shadow: 0 6px 24px rgba(26, 92, 26, 0.10);
+    transform: translateY(-2px);
+  }
+
+  .review-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .city-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #1a5c1a;
+    margin: 0;
+  }
+
+  .rating-badge {
+    background: #e8e8b0;
+    color: #3a5c1a;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .stars {
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    color: #1a5c1a;
+  }
+
+  .review-text {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .review-meta {
+    font-size: 0.78rem;
+    color: #aaa;
+    border-top: 1px solid #f0f0e8;
+    padding-top: 0.7rem;
+    margin-top: auto;
+    display: block;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #888;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .empty-state p {
+    margin: 0 0 1.2rem;
+    font-size: 1rem;
+  }
+
+  .empty-state .btn.btn-primary {
+    display: inline-block;
+    padding: 0.75rem 1.8rem;
+    background: #1a5c1a;
+    color: #fff;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .empty-state .btn.btn-primary:hover {
+    background: #144a14;
+  }
+
+  @media (max-width: 640px) {
+    .search-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .clear-search-btn {
+      text-align: center;
+    }
+  }
+</style>
+
 <section class="hero">
     <h1>City Reviews</h1>
     <p>Explore what travellers think about cities around the world.</p>
 
     <div class="hero-actions">
-        <a href="{% url 'create_post' %}" class="btn btn-primary">Create a New Review</a>
+        <a href="{% url 'create_post' %}" class="btn btn-primary">
+            Create a New Review
+        </a>
     </div>
 </section>
 
 <section class="search-section">
-    <input type="text" id="citySearch" placeholder="Search by city..." class="search-input">
+    <form method="get" action="{% url 'review_list' %}" class="search-form">
+        <input
+            type="text"
+            id="citySearch"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Search by city..."
+            class="search-input"
+        >
+
+        {% if search_query %}
+            <a href="{% url 'review_list' %}" class="clear-search-btn">Clear</a>
+        {% endif %}
+    </form>
 </section>
 
 <section class="reviews-section">
@@ -45,17 +326,13 @@
                 by {{ r.user.username }} — {{ r.created_at }}
             </small>
 
-            {% if user.is_authenticated and r.user == user %}
-                <div class="review-actions">
-                    <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
-                    <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
-                </div>
-            {% endif %}
         </div>
     {% empty %}
         <div class="empty-state">
             <p>No reviews yet.</p>
-            <a href="{% url 'create_post' %}" class="btn btn-primary">Be the first to post</a>
+            <a href="{% url 'create_post' %}" class="btn btn-primary">
+                Be the first to post
+            </a>
         </div>
     {% endfor %}
 </section>
