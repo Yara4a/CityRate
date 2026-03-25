@@ -1,7 +1,9 @@
 {% extends "city/base.html" %}
 {% load static %}
 
-{% block title %}Create Review | CityRate{% endblock %}
+{% block title %}
+    {% if is_draft_mode %}Create Draft | CityRate{% else %}Create Review | CityRate{% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -255,8 +257,21 @@
 
 <section class="form-page">
     <div class="form-card">
-        <h1>Create Review</h1>
-        <p class="form-subtitle">Share your travel experience with other users.</p>
+        <h1>
+            {% if is_draft_mode %}
+                Create Draft
+            {% else %}
+                Create Review
+            {% endif %}
+        </h1>
+
+        <p class="form-subtitle">
+            {% if is_draft_mode %}
+                Save your ideas first and come back to edit them later.
+            {% else %}
+                Share your travel experience with other users.
+            {% endif %}
+        </p>
 
         {% if draft_saved %}
             <p class="draft-note">Draft saved.</p>
@@ -316,7 +331,9 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" name="action" value="post" class="btn-primary">Post Review</button>
+                <button type="submit" name="action" value="post" class="btn-primary">
+                    {% if is_draft_mode %}Publish Review{% else %}Post Review{% endif %}
+                </button>
                 <button type="submit" name="action" value="draft" class="btn-draft">Save to Draft</button>
             </div>
         </form>

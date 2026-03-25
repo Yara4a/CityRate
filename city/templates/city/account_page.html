@@ -4,178 +4,458 @@
 {% block title %}My Account | CityRate{% endblock %}
 
 {% block content %}
-<section class="account-layout">
 
-    <aside class="account-sidebar">
-        <div class="account-user-block">
-            <h2 class="account-username">{{ user.username }}</h2>
-            <p class="account-email">{{ user.email }}</p>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
 
-            <p class="review-count">
-                Number of reviews: {{ review_count }}
-            </p>
-        </div>
+  * {
+    box-sizing: border-box;
+  }
 
-        <div class="account-menu">
-            <a
-                href="{% url 'account_page' %}?tab=account"
-                class="account-menu-title {% if active_tab == 'account' %}active{% endif %}"
-            >
-                My Account
-            </a>
+  .account-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    font-family: 'DM Sans', sans-serif;
+  }
 
-            <a
-                href="{% url 'account_page' %}?tab=draft"
-                class="account-menu-title {% if active_tab == 'draft' %}active{% endif %}"
-            >
-                Draft
-            </a>
+  .sidebar {
+    background: #eef3e3;
+    border-radius: 28px;
+    padding: 2rem 1.5rem;
+    min-height: 720px;
+    box-shadow: 0 10px 30px rgba(26, 92, 26, 0.06);
+    border: 1px solid #e1e8d3;
+  }
 
-            <form action="{% url 'logout' %}" method="post" class="account-action-form">
+  .profile-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: #1a5c1a;
+    margin: 0 0 0.4rem;
+  }
+
+  .profile-email {
+    color: #6f7d63;
+    font-size: 0.98rem;
+    margin-bottom: 1.4rem;
+    word-break: break-word;
+  }
+
+  .review-count {
+    background: #f8f7ee;
+    color: #365b2b;
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border: 1px solid #e6ead9;
+  }
+
+  .sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sidebar-tab,
+  .logout-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+
+  .sidebar-tab {
+    background: #ffffff;
+    color: #1a5c1a;
+    border: 1px solid #e2e7d7;
+  }
+
+  .sidebar-tab:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(26, 92, 26, 0.08);
+    background: #f8fbf2;
+  }
+
+  .sidebar-tab.active {
+    background: #1a5c1a;
+    color: #fff;
+    border: 1px solid #1a5c1a;
+    box-shadow: 0 10px 22px rgba(26, 92, 26, 0.18);
+  }
+
+  .logout-btn {
+    background: #ffffff;
+    color: #1a5c1a;
+    border: 1px solid #e2e7d7;
+  }
+
+  .logout-btn:hover {
+    background: #f8fbf2;
+  }
+
+  .main-content {
+    padding-top: 0.2rem;
+  }
+
+  .account-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3.3rem;
+    font-weight: 400;
+    color: #1a5c1a;
+    margin: 0 0 0.35rem;
+  }
+
+  .account-header p {
+    color: #6f7d63;
+    font-size: 1.15rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.4rem;
+  }
+
+  .top-btn {
+    display: inline-block;
+    padding: 0.9rem 1.5rem;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.98rem;
+    transition: transform 0.15s, background 0.2s, box-shadow 0.15s;
+  }
+
+  .top-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(26, 92, 26, 0.12);
+  }
+
+  .top-btn.review-btn {
+    background: #1a5c1a;
+    color: #fff;
+  }
+
+  .top-btn.review-btn:hover {
+    background: #144a14;
+  }
+
+  .top-btn.draft-btn {
+    background: #e8e8b0;
+    color: #1a5c1a;
+  }
+
+  .top-btn.draft-btn:hover {
+    background: #dcdc96;
+  }
+
+  .search-bar-wrap {
+    margin-bottom: 1.8rem;
+  }
+
+  .search-form {
+    max-width: 500px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.95rem 1.1rem;
+    border-radius: 14px;
+    border: 1.5px solid #dfe5d3;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .search-input:focus {
+    border-color: #1a5c1a;
+    box-shadow: 0 0 0 4px rgba(26, 92, 26, 0.08);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .review-card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 1.4rem;
+    box-shadow: 0 10px 24px rgba(26, 92, 26, 0.06);
+    border: 1px solid #edf0e4;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+  }
+
+  .review-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .review-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: #1a5c1a;
+    margin: 0;
+    line-height: 1.05;
+  }
+
+  .rating-badge {
+    background: #e8e8b0;
+    color: #4c6427;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .stars {
+    color: #d6a800;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.9rem;
+  }
+
+  .review-text {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    flex-grow: 1;
+  }
+
+  .review-meta {
+    color: #8b8b8b;
+    font-size: 0.92rem;
+    border-top: 1px solid #ecefe4;
+    padding-top: 1rem;
+    margin-top: auto;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .edit-btn,
+  .delete-btn,
+  .publish-btn {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+
+  .edit-btn:hover,
+  .delete-btn:hover,
+  .publish-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .edit-btn {
+    background: #e8e8b0;
+    color: #1a5c1a;
+  }
+
+  .delete-btn {
+    background: #ef5350;
+    color: #fff;
+  }
+
+  .publish-btn {
+    background: #1a5c1a;
+    color: #fff;
+  }
+
+  .empty-message {
+    background: #fff;
+    border: 1px solid #e9eedc;
+    border-radius: 20px;
+    padding: 2rem;
+    color: #6f7d63;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .account-page {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      min-height: auto;
+    }
+  }
+</style>
+
+<section class="account-page">
+  <aside class="sidebar">
+    <h2 class="profile-name">{{ user.username }}</h2>
+    <p class="profile-email">{{ user.email }}</p>
+
+    <div class="review-count">
+      Number of reviews: {{ review_count }}
+    </div>
+
+    <div class="sidebar-actions">
+      <a
+        href="{% url 'account_page' %}?tab=account"
+        class="sidebar-tab {% if active_tab == 'account' %}active{% endif %}"
+      >
+        My Account
+      </a>
+
+      <a
+        href="{% url 'account_page' %}?tab=draft"
+        class="sidebar-tab {% if active_tab == 'draft' %}active{% endif %}"
+      >
+        Draft
+      </a>
+
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">Logout</button>
+      </form>
+    </div>
+  </aside>
+
+  <section class="main-content">
+    <div class="account-header">
+      <h1>My Account</h1>
+      <p>Manage your reviews and travel posts.</p>
+    </div>
+
+    <div class="top-actions">
+      <a href="{% url 'create_post' %}" class="top-btn review-btn">
+        Create a New Review
+      </a>
+
+      <a href="{% url 'create_post' %}?mode=draft" class="top-btn draft-btn">
+        Create a New Draft
+      </a>
+    </div>
+
+    <div class="search-bar-wrap">
+      <form method="get" action="{% url 'account_page' %}" class="search-form">
+        <input type="hidden" name="tab" value="{{ active_tab }}">
+        <input
+          type="text"
+          name="q"
+          value="{{ search_query }}"
+          placeholder="Search..."
+          class="search-input"
+        >
+      </form>
+    </div>
+
+    {% if active_tab == "draft" %}
+      <div class="cards-grid">
+        {% for draft in drafts %}
+          <div class="review-card">
+            <div class="review-card-top">
+              <h3>{{ draft.city.city_name }}</h3>
+              <span class="rating-badge">{{ draft.rating_score }}/5</span>
+            </div>
+
+            <div class="stars">
+              {% for i in "12345" %}
+                {% if forloop.counter <= draft.rating_score %}
+                  ⭐
+                {% else %}
+                  ☆
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="review-text">{{ draft.review_text }}</div>
+
+            <div class="review-meta">
+              draft by {{ draft.user.username }} — {{ draft.updated_at|date:"F j, Y, g:i a" }}
+            </div>
+
+            <div class="card-actions">
+              <a href="{% url 'edit_post' draft.id %}" class="edit-btn">Edit</a>
+
+              <form method="post" action="{% url 'publish_draft' draft.id %}" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="account-menu-title logout-menu-btn">
-                    Logout
-                </button>
-            </form>
-        </div>
-    </aside>
+                <button type="submit" class="publish-btn">Publish</button>
+              </form>
 
-    <section class="account-main">
-
-        {% if active_tab == "account" %}
-            <h1 class="account-page-title">My Account</h1>
-            <p class="account-subtitle">Manage your reviews and travel posts.</p>
-
-            <div class="hero-actions account-create-btn">
-                <a href="{% url 'create_post' %}" class="btn btn-primary">
-                    Create a New Review
-                </a>
+              <a href="{% url 'delete_post' draft.id %}" class="delete-btn">Delete</a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="empty-message">
+            No drafts yet.
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="cards-grid">
+        {% for review in reviews %}
+          <div class="review-card">
+            <div class="review-card-top">
+              <h3>{{ review.city.city_name }}</h3>
+              <span class="rating-badge">{{ review.rating_score }}/5</span>
             </div>
 
-            <section class="search-section account-search">
-                <form method="get" action="{% url 'account_page' %}">
-                    <input type="hidden" name="tab" value="account">
-                    <input
-                        type="text"
-                        name="q"
-                        value="{{ search_query }}"
-                        placeholder="Search..."
-                        class="search-input"
-                    >
-                </form>
-            </section>
-
-            <section class="reviews-section">
-                {% for r in reviews %}
-                    <div class="review-card">
-                        <div class="review-top">
-                            <h3 class="city-name">{{ r.city.city_name }}</h3>
-                            <span class="rating-badge">{{ r.rating_score }}/5</span>
-                        </div>
-
-                        <div class="stars">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= r.rating_score %}
-                                    <span>⭐</span>
-                                {% else %}
-                                    <span>☆</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-
-                        <p class="review-text">{{ r.review_text }}</p>
-
-                        <small class="review-meta">
-                            by {{ r.user.username }} — {{ r.created_at }}
-                        </small>
-
-                        <div class="review-actions">
-                            <a href="{% url 'edit_post' r.id %}" class="btn btn-small btn-edit">Edit</a>
-                            <a href="{% url 'delete_post' r.id %}" class="btn btn-small btn-delete">Delete</a>
-                        </div>
-                    </div>
-
-                {% empty %}
-                    <div class="empty-state">
-                        <p>You haven't posted any reviews yet.</p>
-                        <a href="{% url 'create_post' %}" class="btn btn-primary">
-                            Create your first review
-                        </a>
-                    </div>
-                {% endfor %}
-            </section>
-        {% endif %}
-
-        {% if active_tab == "draft" %}
-            <h1 class="account-page-title">Draft</h1>
-            <p class="account-subtitle">Here are your saved drafts.</p>
-
-            <div class="hero-actions account-create-btn">
-                <a href="{% url 'create_post' %}" class="btn btn-primary">
-                    Create a New Draft
-                </a>
+            <div class="stars">
+              {% for i in "12345" %}
+                {% if forloop.counter <= review.rating_score %}
+                  ⭐
+                {% else %}
+                  ☆
+                {% endif %}
+              {% endfor %}
             </div>
 
-            <section class="search-section account-search">
-                <form method="get" action="{% url 'account_page' %}">
-                    <input type="hidden" name="tab" value="draft">
-                    <input
-                        type="text"
-                        name="q"
-                        value="{{ search_query }}"
-                        placeholder="Search drafts..."
-                        class="search-input"
-                    >
-                </form>
-            </section>
+            <div class="review-text">{{ review.review_text }}</div>
 
-            <section class="reviews-section">
-                {% for draft in drafts %}
-                    <div class="review-card">
-                        <div class="review-top">
-                            <h3 class="city-name">{{ draft.city.city_name }}</h3>
-                            <span class="rating-badge">{{ draft.city.country }}</span>
-                        </div>
+            <div class="review-meta">
+              by {{ review.user.username }} — {{ review.created_at|date:"F j, Y, g:i a" }}
+            </div>
 
-                        <div class="stars">
-                            {% if draft.rating_score %}
-                                {% for i in "12345" %}
-                                    {% if forloop.counter <= draft.rating_score %}
-                                        <span>⭐</span>
-                                    {% else %}
-                                        <span>☆</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <span>Not rated yet</span>
-                            {% endif %}
-                        </div>
-
-                        <p class="review-text">{{ draft.review_text|default:"No draft content yet." }}</p>
-
-                        <small class="review-meta">
-                            created {{ draft.created_at }}{% if draft.updated_at %} — last edited {{ draft.updated_at }}{% endif %}
-                        </small>
-
-                        <div class="review-actions">
-                            <a href="{% url 'edit_post' draft.id %}" class="btn btn-small btn-edit">Edit</a>
-
-                            <form action="{% url 'publish_draft' draft.id %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-small btn-primary">Post</button>
-                            </form>
-
-                            <a href="{% url 'delete_post' draft.id %}" class="btn btn-small btn-delete">Delete</a>
-                        </div>
-                    </div>
-                {% empty %}
-                    <div class="empty-state">
-                        <p>You don't have any drafts yet.</p>
-                    </div>
-                {% endfor %}
-            </section>
-        {% endif %}
-
-    </section>
+            <div class="card-actions">
+              <a href="{% url 'edit_post' review.id %}" class="edit-btn">Edit</a>
+              <a href="{% url 'delete_post' review.id %}" class="delete-btn">Delete</a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="empty-message">
+            No reviews yet.
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
 </section>
+
 {% endblock %}

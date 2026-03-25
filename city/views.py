@@ -31,6 +31,8 @@ def get_or_create_city(city_name, country):
 @login_required(login_url="login")
 def create_post(request):
     draft_id = request.POST.get("draft_id") or request.GET.get("draft_id")
+    mode = request.GET.get("mode")
+    is_draft_mode = mode == "draft"
     existing_draft = None
 
     if draft_id:
@@ -48,7 +50,10 @@ def create_post(request):
             country = form.cleaned_data["country"].strip()
             review_text = form.cleaned_data["review_text"]
             rating_score = form.cleaned_data["rating_score"]
-            action = request.POST.get("action", "post")
+
+            action = request.POST.get("action")
+            if not action:
+                action = "draft" if is_draft_mode else "post"
 
             city = get_or_create_city(city_name, country)
 
@@ -82,6 +87,7 @@ def create_post(request):
             "form": form,
             "draft_id": existing_draft.id if existing_draft else "",
             "draft_saved": request.GET.get("draft_saved") == "1",
+            "is_draft_mode": is_draft_mode,
         },
     )
 
@@ -95,7 +101,6 @@ def autosave_draft(request):
     rating_raw = request.POST.get("rating_score")
     draft_id = request.POST.get("draft_id")
 
-    # 只有真的有內容時才 autosave
     if not city_name and not review_text and not rating_raw:
         return JsonResponse({"saved": False, "draft_id": draft_id or ""})
 
