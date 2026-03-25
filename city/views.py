@@ -299,6 +299,9 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             return redirect("home")
+        else:
+            print("SIGNUP ERRORS:", form.errors)
+            print("POST DATA:", request.POST)
     else:
         form = CustomUserCreationForm()
 
