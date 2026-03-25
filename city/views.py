@@ -312,3 +312,9 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
     return redirect("home")
+
+def about_page(request):
+    return render(request, 'city/about.html')
+
+def privacy_page(request):
+    return render(request, 'city/privacy.html')

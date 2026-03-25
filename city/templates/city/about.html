@@ -1,0 +1,60 @@
+{% extends "city/base.html" %}
+
+{% block title %}About | CityRate{% endblock %}
+
+{% block content %}
+<style>
+  .info-page{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .info-card{
+    background: #eef3e3;
+    border: 1px solid #e1e8d3;
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(26, 92, 26, 0.06);
+  }
+
+  .info-card h1{
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: #1a5c1a;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .info-card p{
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #6f7d63;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px){
+    .info-card{
+      padding: 1.5rem;
+    }
+
+    .info-card h1{
+      font-size: 2.2rem;
+    }
+  }
+</style>
+
+<section class="info-page">
+  <div class="info-card">
+    <h1>About CityRate</h1>
+    <p>
+      CityRate is a platform where users can share travel experiences,
+      explore city reviews, and keep memories from places they have visited.
+    </p>
+    <p>
+      Our goal is to make discovering new places easier through honest,
+      user-created reviews and simple travel storytelling.
+    </p>
+  </div>
+</section>
+{% endblock %}
