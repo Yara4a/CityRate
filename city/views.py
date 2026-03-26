@@ -312,3 +312,12 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
     return redirect("home")
+
+def privacy(request):
+    return render(request, "city/privacy.html")
+
+def discover(request):
+    return render(request, "city/discover.html")
+
+def about(request):
+    return render(request, "city/about.html")
