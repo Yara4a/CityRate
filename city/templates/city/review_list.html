@@ -5,7 +5,6 @@
 
 {% block content %}
 
-
 <section class="reviews-hero">
     <h1>City Reviews</h1>
     <p>See what people are saying about cities around the world.</p>
@@ -35,12 +34,12 @@
         <div class="reviews-page-card">
             <div class="review-top">
                 <h3 class="city-name">{{ review.city }}</h3>
-                <span class="reviews-rating-badge">{{ review.rating }}/5</span>
+                <span class="reviews-rating-badge">{{ review.rating_score }}/5</span>
             </div>
 
-            <div class="reviews-stars">
+            <div class="stars">
                 {% for i in "12345" %}
-                    {% if forloop.counter <= review.rating %}
+                    {% if forloop.counter <= review.rating_score %}
                         ★
                     {% else %}
                         ☆
@@ -61,4 +60,5 @@
         </div>
     {% endfor %}
 </section>
+
 {% endblock %}

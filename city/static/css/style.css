@@ -1074,9 +1074,25 @@ a {
 }
 
 .reviews-stars {
-    font-size: 0.95rem;
-    letter-spacing: 1px;
-    color: #1a5c1a;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.6rem;
+    line-height: 1;
+    margin: 0.35rem 0 0.55rem;
+}
+
+.review-star {
+    display: inline-block;
+    font-weight: 700;
+}
+
+.review-star.filled {
+    color: #f2b233;
+}
+
+.review-star.empty {
+    color: #d9b24c;
 }
 
 .reviews-text {
