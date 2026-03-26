@@ -320,5 +320,9 @@ def logout_view(request):
 def about_page(request):
     return render(request, 'city/about.html')
 
-def privacy_page(request):
-    return render(request, 'city/privacy.html')
+def privacy(request):
+    return render(request, "city/privacy.html")
+
+def discover(request):
+    return render(request, "city/discover.html")
+
