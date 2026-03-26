@@ -225,14 +225,28 @@ gap:20px;
 
 <div class="navbar">
 
-<div class="logo">
-<img src="{% static 'images/logo.jpeg' %}">
-</div>
+    <div class="logo">
+        <img src="{% static 'images/logo.jpeg' %}">
+    </div>
 
-<div class="nav-links">
-<a href="#">Sign up</a>
-<a href="#" class="login-btn">Login</a>
-</div>
+    <div class="nav-links">
+        <a href="{% url 'review_list' %}">Reviews</a>
+        
+        {% if user.is_authenticated %}
+            <span class="nav-user" style="font-weight:600; font-size:16px; color:white;">
+                Hi, {{ user.username }}
+            </span>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="login-btn" style="background:none; cursor:pointer; color:white; font-family:inherit; font-size:16px;">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'signup' %}">Sign up</a>
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+        {% endif %}
+    </div>
 
 </div>
 
@@ -254,21 +268,7 @@ Discover new cities.
 
 <p>Search a city and explore real traveler experiences.</p>
 
-<div class="search-box">
 
-<form class="search-form" action="/cityrate/reviews/" method="GET">
-
-<button type="submit">⌕</button>
-
-<input
-type="text"
-name="city"
-placeholder="Search for a city"
->
-
-</form>
-
-</div>
 
 <div class="cities">
 
