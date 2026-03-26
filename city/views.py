@@ -147,6 +147,10 @@ def autosave_draft(request):
 
 def review_list(request):
     search_query = request.GET.get("q", "").strip()
+    city_query = request.GET.get("city", "").strip()
+
+    if city_query:
+        search_query = city_query
 
     reviews = Post.objects.select_related("city", "user").filter(
         is_draft=False
