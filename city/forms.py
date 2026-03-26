@@ -1,8 +1,34 @@
 from django import forms
-from .models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import pycountry
+
+from .models import Post, City
+
+
+COUNTRY_NAME_MAP = {
+    "Taiwan, Province of China": "Taiwan",
+    "Korea, Republic of": "South Korea",
+    "Korea, Democratic People's Republic of": "North Korea",
+    "Viet Nam": "Vietnam",
+    "Russian Federation": "Russia",
+    "Iran, Islamic Republic of": "Iran",
+    "Syrian Arab Republic": "Syria",
+    "Moldova, Republic of": "Moldova",
+    "Venezuela, Bolivarian Republic of": "Venezuela",
+    "Tanzania, United Republic of": "Tanzania",
+    "Bolivia, Plurinational State of": "Bolivia",
+    "Palestine, State of": "Palestine",
+    "Brunei Darussalam": "Brunei",
+    "Lao People's Democratic Republic": "Laos",
+    "Myanmar": "Myanmar",
+    "Czechia": "Czech Republic",
+    "North Macedonia": "Macedonia",
+}
+
+
+def normalize_country_name(country_name):
+    return COUNTRY_NAME_MAP.get(country_name, country_name)
 
 
 COUNTRY_CHOICES = sorted(
@@ -20,15 +46,23 @@ class PostForm(forms.ModelForm):
         (5, "5 Stars"),
     ]
 
-    city_name = forms.CharField(
-        max_length=120,
-        label="City",
-        widget=forms.TextInput(attrs={"placeholder": "Enter city name"})
+    country = forms.ChoiceField(
+        choices=[("", "Select a country")] + COUNTRY_CHOICES,
+        label="Country"
     )
 
-    country = forms.ChoiceField(
-        choices=COUNTRY_CHOICES,
-        label="Country"
+    city = forms.ModelChoiceField(
+        queryset=City.objects.none(),
+        required=False,
+        empty_label="Select a city",
+        label="City"
+    )
+
+    city_name = forms.CharField(
+        required=False,
+        max_length=120,
+        label="Or type city manually",
+        widget=forms.TextInput(attrs={"placeholder": "Enter city if not listed"})
     )
 
     rating_score = forms.TypedChoiceField(
@@ -41,7 +75,27 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["city_name", "country", "review_text", "rating_score"]
+        fields = ["country", "city", "city_name", "review_text", "rating_score"]
+        widgets = {
+            "review_text": forms.Textarea(attrs={"placeholder": "Share your experience..."})
+        }
+
+    def __init__(self, *args, **kwargs):
+        selected_country = kwargs.pop("selected_country", None)
+        super().__init__(*args, **kwargs)
+
+        country = selected_country or self.data.get("country")
+
+        if not country and self.initial.get("country"):
+            country = self.initial.get("country")
+
+        if country:
+            normalized_country = normalize_country_name(country)
+            self.fields["city"].queryset = City.objects.filter(
+                country__iexact=normalized_country
+            ).order_by("city_name")
+        else:
+            self.fields["city"].queryset = City.objects.none()
 
     def clean_rating_score(self):
         rating = self.cleaned_data.get("rating_score")
@@ -53,6 +107,16 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("Rating must be between 1 and 5.")
 
         return rating
+
+    def clean(self):
+        cleaned_data = super().clean()
+        city = cleaned_data.get("city")
+        city_name = (cleaned_data.get("city_name") or "").strip()
+
+        if not city and not city_name:
+            raise forms.ValidationError("Please select a city or type one manually.")
+
+        return cleaned_data
 
 
 class CustomUserCreationForm(UserCreationForm):

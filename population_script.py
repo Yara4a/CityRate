@@ -11,6 +11,49 @@ from django.utils import timezone
 from city.models import City, Post
 
 
+USERNAMES = [
+    "travelgirl23",
+    "nomad_jack",
+    "citylover",
+    "wanderalex",
+    "foodie_ella",
+    "backpacker_tom",
+    "sunset_sam",
+    "urban_zoe",
+    "weekendmia",
+    "roamryan",
+]
+
+REVIEW_TEXTS = [
+    "Absolutely loved this place, would come back again!",
+    "Nice city but a bit too crowded for me.",
+    "Food was amazing and people were super friendly.",
+    "Not bad, but I expected more honestly.",
+    "Such a beautiful place, especially at sunset.",
+    "Transport was easy and everything was accessible.",
+    "Would recommend for a short trip, not too long.",
+    "One of my favourite cities so far!",
+    "Really lively atmosphere and lots to explore.",
+    "A decent place overall, though a bit expensive in some areas.",
+    "Beautiful streets, great cafés, and loads of character.",
+    "I enjoyed the trip, but I think two days would have been enough.",
+]
+
+GOOD_REVIEW_TEXTS = [
+    "I had such a lovely time here. The city felt vibrant, safe, and easy to explore.",
+    "This ended up being one of my favourite city breaks. Great atmosphere and brilliant food.",
+    "Really enjoyed my stay here. There was loads to do and the city had so much character.",
+    "A beautiful place to visit. I would happily recommend it to friends.",
+]
+
+MID_REVIEW_TEXTS = [
+    "Overall it was a decent trip, though some parts were a bit underwhelming.",
+    "I liked it, but I do not think I would stay too long next time.",
+    "Worth visiting once, especially for the main attractions.",
+    "A solid city break, even if it did not completely wow me.",
+]
+
+
 def random_past_datetime():
     now = timezone.now()
     days_ago = random.randint(0, 180)
@@ -19,222 +62,65 @@ def random_past_datetime():
     return now - timedelta(days=days_ago, hours=hours_ago, minutes=minutes_ago)
 
 
-def weighted_city_choice(cities, popular_names):
-    weighted = []
-    for city in cities:
-        if city.city_name in popular_names:
-            weighted.extend([city] * 4)
-        else:
-            weighted.extend([city] * 1)
-    return random.choice(weighted)
+def create_demo_users():
+    users = []
+
+    for username in USERNAMES:
+        user, created = User.objects.get_or_create(
+            username=username,
+            defaults={"email": f"{username}@example.com"}
+        )
+
+        if created:
+            user.set_password("password123")
+            user.save()
+
+        users.append(user)
+
+    return users
 
 
-def build_review(city_name, rating):
-    openers = [
-        f"I recently visited {city_name} and had a really enjoyable time.",
-        f"My trip to {city_name} was better than I expected.",
-        f"{city_name} ended up being one of the more memorable stops on my trip.",
-        f"I spent a few days in {city_name} and came away with mixed but mostly positive feelings.",
-        f"{city_name} has a really distinct atmosphere compared with other cities I have visited.",
-    ]
-
-    positives = [
-        "The food scene was excellent and there were loads of places to explore.",
-        "Public transport was easy to use and getting around felt quite convenient.",
-        "The city centre was walkable and there were plenty of nice cafés and local shops.",
-        "I loved the architecture and there were lots of areas that felt full of character.",
-        "There was always something to do, whether it was sightseeing, eating, or just wandering around.",
-        "The overall atmosphere felt lively without being too overwhelming.",
-        "I found a lot of hidden spots away from the busiest tourist areas.",
-    ]
-
-    neutrals = [
-        "Some attractions were quite crowded, especially later in the day.",
-        "Prices in the central areas were a bit high, but not completely unreasonable.",
-        "A few places felt slightly overrated, though the city overall was still worth visiting.",
-        "The weather could have been better, but it did not ruin the trip.",
-        "It was busier than I expected, especially around the main tourist spots.",
-    ]
-
-    negatives = [
-        "A few parts felt overpriced and a bit too tourist-focused.",
-        "Transport was not always as smooth as I hoped during peak hours.",
-        "Some attractions did not quite live up to the hype.",
-        "It was harder than expected to avoid the busiest areas.",
-        "I probably would not stay too long on a return visit.",
-    ]
-
-    closers_good = [
-        "I would definitely recommend it for a city break.",
-        "I would happily visit again.",
-        "I can see why so many people like this place.",
-        "Overall, I had a really good experience.",
-    ]
-
-    closers_mid = [
-        "Overall, I still think it was worth visiting.",
-        "I enjoyed it, even though it was not perfect.",
-        "I would recommend it, but with realistic expectations.",
-        "It was a solid trip overall.",
-    ]
-
-    parts = [random.choice(openers), random.choice(positives)]
-
+def build_review_text(rating):
     if rating >= 4:
-        if random.random() < 0.45:
-            parts.append(random.choice(neutrals))
-        parts.append(random.choice(closers_good))
-    elif rating == 3:
-        parts.append(random.choice(neutrals))
-        if random.random() < 0.5:
-            parts.append(random.choice(positives))
-        parts.append(random.choice(closers_mid))
-    else:
-        parts.append(random.choice(negatives))
-        if random.random() < 0.4:
-            parts.append(random.choice(neutrals))
-        parts.append("It was still an interesting place to see once.")
-
-    return " ".join(parts)
+        return random.choice(GOOD_REVIEW_TEXTS)
+    if rating == 3:
+        return random.choice(MID_REVIEW_TEXTS)
+    return random.choice(REVIEW_TEXTS)
 
 
 def populate():
-    print("Starting realistic CityRate population...")
+    print("Creating demo reviews...")
 
+    cities = list(City.objects.all())
+    if not cities:
+        print("No cities found. Run import_cities.py first.")
+        return
 
-    Post.objects.all().delete()
-    City.objects.all().delete()
-    User.objects.exclude(username="admin").delete()
+    users = create_demo_users()
 
-    users_data = [
-        ("sable", "sable@example.com"),
-        ("rabindra", "rabindra@example.com"),
-        ("abdullah", "abdullah@example.com"),
-        ("emilytravels", "emily@example.com"),
-        ("jamescitybreak", "james@example.com"),
-        ("sofiaroutes", "sofia@example.com"),
-        ("urbanroamer", "urbanroamer@example.com"),
-        ("weekendwanderer", "wanderer@example.com"),
-        ("nomadnotes", "nomad@example.com"),
-        ("globetrotter", "globe@example.com"),
-        ("cityhopper", "hopper@example.com"),
-        ("quietexplorer", "quiet@example.com"),
-        ("trainwindow", "trainwindow@example.com"),
-        ("mapandmatcha", "mapandmatcha@example.com"),
-        ("latenightwalker", "latenightwalker@example.com"),
-    ]
+    created_count = 0
 
-    users = []
-    for username, email in users_data:
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password="Testpass123!"
-        )
-        users.append(user)
-
-    cities_data = [
-        ("London", "United Kingdom"),
-        ("Manchester", "United Kingdom"),
-        ("Edinburgh", "United Kingdom"),
-        ("Paris", "France"),
-        ("Lyon", "France"),
-        ("Rome", "Italy"),
-        ("Milan", "Italy"),
-        ("Barcelona", "Spain"),
-        ("Madrid", "Spain"),
-        ("Lisbon", "Portugal"),
-        ("Amsterdam", "Netherlands"),
-        ("Berlin", "Germany"),
-        ("Munich", "Germany"),
-        ("Vienna", "Austria"),
-        ("Prague", "Czech Republic"),
-        ("Budapest", "Hungary"),
-        ("Dublin", "Ireland"),
-        ("New York", "United States"),
-        ("Chicago", "United States"),
-        ("Toronto", "Canada"),
-        ("Vancouver", "Canada"),
-        ("Tokyo", "Japan"),
-        ("Kyoto", "Japan"),
-        ("Seoul", "South Korea"),
-        ("Bangkok", "Thailand"),
-        ("Singapore", "Singapore"),
-        ("Sydney", "Australia"),
-        ("Melbourne", "Australia"),
-        ("Dubai", "United Arab Emirates"),
-        ("Istanbul", "Turkey"),
-    ]
-
-    cities = []
-    for city_name, country in cities_data:
-        city = City.objects.create(city_name=city_name, country=country)
-        cities.append(city)
-
-    popular_names = {
-        "London", "Paris", "Rome", "Barcelona", "Amsterdam",
-        "New York", "Tokyo", "Seoul", "Singapore", "Dubai"
-    }
-
-
-    weighted_users = []
-    for user in users:
-        if user.username in {"emilytravels", "cityhopper", "urbanroamer", "sable", "globetrotter"}:
-            weighted_users.extend([user] * 4)
-        else:
-            weighted_users.extend([user] * 2)
-
-    previous_city = None
-    previous_user = None
-
-    all_posts = []
-
-    total_posts = 180
-
-    for _ in range(total_posts):
-
-        city = weighted_city_choice(cities, popular_names)
-        retry = 0
-        while previous_city and city.city_name == previous_city.city_name and retry < 5:
-            city = weighted_city_choice(cities, popular_names)
-            retry += 1
-
-    
-        user = random.choice(weighted_users)
-        retry = 0
-        while previous_user and user.username == previous_user.username and retry < 5:
-            user = random.choice(weighted_users)
-            retry += 1
-
-    
-        rating = random.choices(
-            population=[2, 3, 4, 5],
-            weights=[10, 20, 35, 35],
-            k=1
-        )[0]
-
-        review_text = build_review(city.city_name, rating)
+    for _ in range(40):
+        user = random.choice(users)
+        city = random.choice(cities)
+        rating = random.randint(2, 5)
 
         post = Post.objects.create(
             user=user,
             city=city,
-            review_text=review_text,
-            rating_score=rating
+            review_text=build_review_text(rating),
+            rating_score=rating,
+            is_draft=False,
         )
 
         fake_time = random_past_datetime()
         post.created_at = fake_time
         post.save(update_fields=["created_at"])
 
-        all_posts.append(post)
-        previous_city = city
-        previous_user = user
+        created_count += 1
 
-    print(f"Created {len(users)} users")
-    print(f"Created {len(cities)} cities")
-    print(f"Created {len(all_posts)} posts")
-    print("Done.")
-    
+    print(f"Created {created_count} demo reviews.")
+
 
 if __name__ == "__main__":
     populate()
