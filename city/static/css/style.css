@@ -18,12 +18,16 @@ a {
    BASE / NAVBAR / FOOTER
    ========================= */
 
+
 .navbar {
-    background: #fff;
-    border-bottom: 1px solid #e8e8d8;
+    background: #fff !important;
+    border-bottom: 1px solid #e8e8d8 !important;
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
+    padding: 0 !important;
+    min-height: 64px;
 }
 
 .nav-container {
@@ -31,10 +35,11 @@ a {
     margin: 0 auto;
     padding: 0 2rem;
     height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     gap: 1.5rem;
+    width: 100%;
 }
 
 .logo {
@@ -46,12 +51,16 @@ a {
 
 .logo img {
     width: 58px;
+    height: auto;
+    display: block;
 }
 
 .nav-links {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end;
     gap: 0.25rem;
+    margin-left: auto;
 }
 
 .nav-links a {

@@ -118,17 +118,10 @@ class CityRateTests(TestCase):
         self.client.login(username="sable", password=self.password)
 
         response = self.client.post(reverse("create_post"), {
-<<<<<<< HEAD
-            "city_name": "Madrid",
-            "country": "Spain",
-            "review_text": "Nice place",
-            "rating_score": 6,   # invalid
-=======
             "country": "Spain",
             "city_name": "Madrid",
             "review_text": "Nice place",
             "rating_score": 6,
->>>>>>> main
             "action": "post",
         })
 
