@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Search reviews by city
     const searchInput = document.getElementById("citySearch");
     const reviewCards = document.querySelectorAll(".review-card");
     const noResultsMessage = document.getElementById("noResultsMessage");
@@ -33,48 +35,60 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const starContainer = document.getElementById("starRating");
-    const ratingInput = document.getElementById("id_rating_score");
+    // Star rating for create/edit forms
+    const starRatingWrappers = document.querySelectorAll(".star-rating");
 
-    if (starContainer && ratingInput) {
-        const stars = starContainer.querySelectorAll(".star");
-        let selectedRating = parseInt(ratingInput.value) || 0;
+    starRatingWrappers.forEach(function (wrapper) {
+        const labels = wrapper.querySelectorAll(".star");
+        const radios = wrapper.querySelectorAll('input[name="rating_score"]');
 
-        function showStars(value, className) {
-            stars.forEach(function (star) {
-                const starValue = parseInt(star.dataset.value);
-                star.classList.remove("active", "hover");
+        if (!labels.length || !radios.length) return;
+
+        function getSelectedValue() {
+            const checked = wrapper.querySelector('input[name="rating_score"]:checked');
+            return checked ? parseInt(checked.value) : 0;
+        }
+
+        function paintStars(value, className) {
+            labels.forEach(function (label, index) {
+                label.classList.remove("active", "hover");
+
+                const starValue = 5 - index;
 
                 if (starValue <= value) {
-                    star.classList.add(className);
+                    label.classList.add(className);
                 }
             });
         }
 
-        function showSelectedRating() {
-            showStars(selectedRating, "active");
+        function showSelectedStars() {
+            paintStars(getSelectedValue(), "active");
         }
 
-        stars.forEach(function (star) {
-            star.addEventListener("mouseenter", function () {
-                const hoverValue = parseInt(star.dataset.value);
-                showStars(hoverValue, "hover");
+        labels.forEach(function (label, index) {
+            const starValue = 5 - index;
+
+            label.addEventListener("mouseenter", function () {
+                paintStars(starValue, "hover");
             });
 
-            star.addEventListener("click", function () {
-                selectedRating = parseInt(star.dataset.value);
-                ratingInput.value = selectedRating;
-                showSelectedRating();
+            label.addEventListener("click", function () {
+                const radio = wrapper.querySelector(`input[value="${starValue}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
+                showSelectedStars();
             });
         });
 
-        starContainer.addEventListener("mouseleave", function () {
-            showSelectedRating();
+        wrapper.addEventListener("mouseleave", function () {
+            showSelectedStars();
         });
 
-        showSelectedRating();
-    }
+        showSelectedStars();
+    });
 
+    // Autosave draft on create page
     const createReviewForm = document.getElementById("createReviewForm");
 
     if (createReviewForm) {
@@ -99,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const reviewText = reviewTextInput ? reviewTextInput.value.trim() : "";
             const ratingScore = getCheckedRating();
 
-            // 重點：不要只因為 country 有預設值就存空 draft
             if (!cityName && !reviewText && !ratingScore) {
                 return;
             }
@@ -146,6 +159,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.addEventListener("pagehide", autosaveDraft);
     }
+
+    // Load cities when country changes
+    const countrySelect = document.getElementById("id_country");
+    const citySelect = document.getElementById("id_city");
+
+    if (countrySelect && citySelect) {
+        countrySelect.addEventListener("change", function () {
+            const country = this.value;
+
+            citySelect.innerHTML = '<option value="">Select a city</option>';
+
+            if (!country) {
+                return;
+            }
+
+            fetch("/cityrate/load-cities/?country=" + encodeURIComponent(country))
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    data.forEach(function (city) {
+                        const option = document.createElement("option");
+                        option.value = city.id;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
+                })
+                .catch(function (error) {
+                    console.error("Error loading cities:", error);
+                });
+        });
+    }
 });
 
-console.log("City search JS loaded");
+console.log("CityRate JS loaded");

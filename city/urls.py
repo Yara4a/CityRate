@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path("create/", views.create_post, name="create_post"),
     path("create/autosave/", views.autosave_draft, name="autosave_draft"),
+    path("ajax/load-cities/", views.load_cities, name="load_cities"),
     path("reviews/", views.review_list, name="review_list"),
     path("account/", views.account_page, name="account_page"),
     path("homepage/", views.home, name="home"),
@@ -15,5 +16,4 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("about/", views.about_page, name="about_page"),
     path("privacy/", views.privacy_page, name="privacy_page"),
-    path("discover/", views.discover, name="discover"),
 ]

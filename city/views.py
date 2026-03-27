@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-from .forms import PostForm, CustomUserCreationForm
+from .forms import PostForm, CustomUserCreationForm, normalize_country_name
 from .models import Post, City
 
 
@@ -14,18 +14,32 @@ def home(request):
 
 
 def get_or_create_city(city_name, country):
+    normalized_country = normalize_country_name(country)
+
     city = City.objects.filter(
         city_name__iexact=city_name.strip(),
-        country__iexact=country.strip()
+        country__iexact=normalized_country.strip()
     ).first()
 
     if not city:
         city = City.objects.create(
             city_name=city_name.strip(),
-            country=country.strip()
+            country=normalized_country.strip()
         )
 
     return city
+
+
+def load_cities(request):
+    country = (request.GET.get("country") or "").strip()
+    normalized_country = normalize_country_name(country)
+
+    cities = City.objects.filter(
+        country__iexact=normalized_country
+    ).order_by("city_name")
+
+    data = [{"id": city.id, "name": city.city_name} for city in cities]
+    return JsonResponse(data, safe=False)
 
 
 @login_required(login_url="login")
@@ -46,16 +60,21 @@ def create_post(request):
         form = PostForm(request.POST)
 
         if form.is_valid():
-            city_name = form.cleaned_data["city_name"].strip()
             country = form.cleaned_data["country"].strip()
+            selected_city = form.cleaned_data.get("city")
+            typed_city_name = (form.cleaned_data.get("city_name") or "").strip()
+
+            if selected_city:
+                city = selected_city
+            else:
+                city = get_or_create_city(typed_city_name, country)
+
             review_text = form.cleaned_data["review_text"]
             rating_score = form.cleaned_data["rating_score"]
 
             action = request.POST.get("action")
             if not action:
                 action = "draft" if is_draft_mode else "post"
-
-            city = get_or_create_city(city_name, country)
 
             post = existing_draft if existing_draft else Post(user=request.user)
             post.city = city
@@ -71,12 +90,16 @@ def create_post(request):
 
     else:
         if existing_draft:
-            form = PostForm(initial={
-                "city_name": existing_draft.city.city_name,
-                "country": existing_draft.city.country,
-                "review_text": existing_draft.review_text,
-                "rating_score": existing_draft.rating_score,
-            })
+            form = PostForm(
+                initial={
+                    "country": existing_draft.city.country,
+                    "city": existing_draft.city,
+                    "city_name": existing_draft.city.city_name,
+                    "review_text": existing_draft.review_text,
+                    "rating_score": existing_draft.rating_score,
+                },
+                selected_country=existing_draft.city.country,
+            )
         else:
             form = PostForm()
 
@@ -95,20 +118,29 @@ def create_post(request):
 @require_POST
 @login_required(login_url="login")
 def autosave_draft(request):
-    city_name = (request.POST.get("city_name") or "").strip()
+    city_id = request.POST.get("city")
+    typed_city_name = (request.POST.get("city_name") or "").strip()
     country = (request.POST.get("country") or "").strip()
     review_text = (request.POST.get("review_text") or "").strip()
     rating_raw = request.POST.get("rating_score")
     draft_id = request.POST.get("draft_id")
 
-    if not city_name and not review_text and not rating_raw:
+    if not city_id and not typed_city_name and not review_text and not rating_raw and not country:
         return JsonResponse({"saved": False, "draft_id": draft_id or ""})
 
-    if not city_name:
-        city_name = "Untitled City"
+    city = None
+    if city_id:
+        city = City.objects.filter(id=city_id).first()
 
-    if not country:
-        country = "United Kingdom"
+    if not city and typed_city_name and country:
+        city = get_or_create_city(typed_city_name, country)
+
+    if not city:
+        return JsonResponse({
+            "saved": False,
+            "draft_id": draft_id or "",
+            "error": "Please select a city or type one manually before saving."
+        })
 
     rating_score = None
     if rating_raw:
@@ -116,8 +148,6 @@ def autosave_draft(request):
             rating_score = int(rating_raw)
         except ValueError:
             rating_score = None
-
-    city = get_or_create_city(city_name, country)
 
     draft = None
     if draft_id:
@@ -214,12 +244,15 @@ def edit_post(request, post_id):
         form = PostForm(request.POST)
 
         if form.is_valid():
-            city_name = form.cleaned_data["city_name"].strip()
             country = form.cleaned_data["country"].strip()
+            selected_city = form.cleaned_data.get("city")
+            typed_city_name = (form.cleaned_data.get("city_name") or "").strip()
 
-            city = get_or_create_city(city_name, country)
+            if selected_city:
+                post.city = selected_city
+            else:
+                post.city = get_or_create_city(typed_city_name, country)
 
-            post.city = city
             post.review_text = form.cleaned_data["review_text"]
             post.rating_score = form.cleaned_data["rating_score"]
 
@@ -240,12 +273,17 @@ def edit_post(request, post_id):
                 return redirect(f"{redirect('account_page').url}?tab=draft")
             return redirect("account_page")
     else:
-        form = PostForm(initial={
-            "city_name": post.city.city_name,
-            "country": post.city.country,
-            "review_text": post.review_text,
-            "rating_score": post.rating_score,
-        })
+        display_country = post.city.country
+        form = PostForm(
+            initial={
+                "country": display_country,
+                "city": post.city,
+                "city_name": post.city.city_name,
+                "review_text": post.review_text,
+                "rating_score": post.rating_score,
+            },
+            selected_country=display_country,
+        )
 
     return render(
         request,
@@ -303,9 +341,7 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             return redirect("home")
-        else:
-            print("SIGNUP ERRORS:", form.errors)
-            print("POST DATA:", request.POST)
+          
     else:
         form = CustomUserCreationForm()
 
@@ -317,12 +353,10 @@ def logout_view(request):
         logout(request)
     return redirect("home")
 
+
 def about_page(request):
-    return render(request, 'city/about.html')
+    return render(request, "city/about.html")
 
-def privacy(request):
+
+def privacy_page(request):
     return render(request, "city/privacy.html")
-
-def discover(request):
-    return render(request, "city/discover.html")
-

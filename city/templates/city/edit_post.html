@@ -5,7 +5,6 @@
 
 {% block content %}
 
-
 <section class="form-page">
     <div class="form-card">
         <h1>{% if post.is_draft %}Edit Draft{% else %}Edit Review{% endif %}</h1>
@@ -17,22 +16,36 @@
             {% endif %}
         </p>
 
-        <form method="post" class="styled-form">
-            {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-error">
+                {{ form.non_field_errors.0 }}
+            </div>
+        {% endif %}
 
-            <p>
-                <label for="{{ form.city_name.id_for_label }}">City:</label>
-                {{ form.city_name }}
-                {% if form.city_name.errors %}
-                    <span class="form-error">{{ form.city_name.errors.0 }}</span>
-                {% endif %}
-            </p>
+        <form method="post" class="styled-form" id="editReviewForm">
+            {% csrf_token %}
 
             <p>
                 <label for="{{ form.country.id_for_label }}">Country:</label>
                 {{ form.country }}
                 {% if form.country.errors %}
                     <span class="form-error">{{ form.country.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <label for="{{ form.city.id_for_label }}">City:</label>
+                {{ form.city }}
+                {% if form.city.errors %}
+                    <span class="form-error">{{ form.city.errors.0 }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <label for="{{ form.city_name.id_for_label }}">Or type city manually:</label>
+                {{ form.city_name }}
+                {% if form.city_name.errors %}
+                    <span class="form-error">{{ form.city_name.errors.0 }}</span>
                 {% endif %}
             </p>
 
@@ -88,5 +101,6 @@
         </p>
     </div>
 </section>
+
 
 {% endblock %}
