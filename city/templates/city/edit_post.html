@@ -102,38 +102,5 @@
     </div>
 </section>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const countrySelect = document.getElementById("id_country");
-    const citySelect = document.getElementById("id_city");
-
-    if (!countrySelect || !citySelect) return;
-
-    countrySelect.addEventListener("change", function () {
-        const country = this.value;
-        const currentSelectedCity = "";
-
-        citySelect.innerHTML = '<option value="">Select a city</option>';
-
-        if (!country) {
-            return;
-        }
-
-        fetch("{% url 'load_cities' %}?country=" + encodeURIComponent(country))
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(city => {
-                    const option = document.createElement("option");
-                    option.value = city.id;
-                    option.textContent = city.name;
-                    citySelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error("Error loading cities:", error);
-            });
-    });
-});
-</script>
 
 {% endblock %}
