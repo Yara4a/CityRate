@@ -1,102 +1,291 @@
-# CityRate
+# CityRate 🌍
 
-## Overview  
-CityRate is a web-based travel review platform that allows users to explore and share experiences about cities around the world.
-
-Users can:
-- Create an account and log in securely  
-- Write reviews for cities with ratings and comments  
-- Edit or delete their own reviews  
-- Save drafts before publishing  
-- Search for cities and browse reviews from other users  
-
-Guest users can:
-- Browse and search city reviews without logging in  
-
-The application is built using Django, Python, HTML, CSS, and JavaScript.
+CityRate is a Django-based web application that allows users to share and explore reviews of cities around the world. Users can create, edit, and manage their own reviews, rate cities, and browse feedback from other users.
 
 ---
 
-## Setup Instructions (Local Machine)
+## 🚀 Features
+
+- User authentication (Sign up, Login, Logout)
+- Create, edit, and delete reviews
+- Save drafts before publishing
+- Star rating system (1–5)
+- Search reviews by city
+- Personal account page for managing posts
+- Public review feed
+- Responsive design using Bootstrap and custom CSS
+
+---
+
+## 🛠️ Technologies Used
+
+- Python (Django)
+- HTML, CSS, JavaScript
+- Bootstrap (responsive framework)
+- SQLite (development database)
+
+---
+
+## ⚙️ Installation & Setup
+
+Follow these steps to run the project locally:
 
 ### 1. Clone the repository
-git clone https://github.com/Yara4a/CityRate.git  
+
+```bash
+git clone https://github.com/Yara4a/CityRate.git
 cd CityRate
+```
 
-### 2. Create a virtual environment
-python -m venv venv  
-source venv/bin/activate   (Mac/Linux)  
-venv\Scripts\activate      (Windows)
+### 2. Install dependencies
 
-### 3. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
----
+### 3. Apply migrations
 
-## Running the Application
-
-### 4. Apply migrations
-python manage.py makemigrations  
+```bash
+python manage.py makemigrations
 python manage.py migrate
+```
 
-### 5. Run the population script
-python population_script.py  
+### 4. Populate the database
 
-This will create sample users and review data for testing.
+```bash
+python import_cities.py
+python population_script.py
+```
 
-### 6. Start the development server
-python manage.py runserver  
+### 5. Run the server
 
-Open in browser:  
+```bash
+python manage.py runserver
+```
+
+### 6. Open in browser
+
 http://127.0.0.1:8000/
 
 ---
 
-## Demo Login
+## 👤 How to Use
 
-You can log in using a demo account created by the population script:
-
-Username: testuser1  
-Password: password123  
-
-Or create your own account using the signup page.
+1. Create an account or log in  
+2. Write a review for a city  
+3. Save it as a draft or publish it  
+4. Edit or delete your reviews from your account page  
+5. Browse and search reviews from other users  
 
 ---
 
-## Features
+## 🧪 Testing
 
-- User authentication (login/signup/logout)
+Run the test suite using:
+
+```bash
+python manage.py test
+```
+
+Tests cover:
+- User authentication
+- Review creation and validation
+- Permissions (edit/delete)
+- Core view functionality
+
+---
+
+## 📁 Project Structure
+
+```
+CityRate/
+├── city/                  # Main Django app
+├── templates/             # HTML templates
+├── static/                # CSS, JS, images
+├── population_script.py   # Generates sample data
+├── import_cities.py       # Imports city dataset
+├── requirements.txt
+└── manage.py
+```
+
+---
+
+## 📌 Notes
+
+- The database file (`db.sqlite3`) is not included and will be generated after running migrations.
+- The population script creates realistic sample data for demonstration.
+- All JavaScript and CSS are stored in static files (no inline code).
+
+---
+
+## 🌐 Deployment
+
+This project is designed to be deployable on PythonAnywhere.
+
+---
+
+## 👥 Team
+
+- Sable  
+- Yara  
+- Abdullah  
+- Rabindra  
+
+---
+
+## 📚 External Resources
+
+- Bootstrap — https://getbootstrap.com/  
+- Google Fonts — https://fonts.google.com/  
+- Django Documentation — https://docs.djangoproject.com/  
+
+---
+
+## 📄 License
+
+This project was developed for educational purposes.# CityRate 🌍
+
+CityRate is a Django-based web application that allows users to share and explore reviews of cities around the world. Users can create, edit, and manage their own reviews, rate cities, and browse feedback from other users.
+
+---
+
+## 🚀 Features
+
+- User authentication (Sign up, Login, Logout)
 - Create, edit, and delete reviews
-- Draft saving functionality
+- Save drafts before publishing
+- Star rating system (1–5)
 - Search reviews by city
-- Rating system (1–5 stars)
-- User account page with personal reviews
-- Responsive user interface
-- JavaScript-enhanced interactions
+- Personal account page for managing posts
+- Public review feed
+- Responsive design using Bootstrap and custom CSS
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-- Python  
-- Django  
-- HTML / CSS  
-- JavaScript  
-- SQLite (development database)  
-- PyCountry  
+- Python (Django)
+- HTML, CSS, JavaScript
+- Bootstrap (responsive framework)
+- SQLite (development database)
 
 ---
 
-## External Sources
+## ⚙️ Installation & Setup
 
-- Django documentation  
-- PyCountry library  
-- Lecture materials and online tutorials  
+Follow these steps to run the project locally:
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Yara4a/CityRate.git
+cd CityRate
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Apply migrations
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### 4. Populate the database
+
+```bash
+python import_cities.py
+python population_script.py
+```
+
+### 5. Run the server
+
+```bash
+python manage.py runserver
+```
+
+### 6. Open in browser
+
+http://127.0.0.1:8000/
 
 ---
 
-## Notes
+## 👤 How to Use
 
-- The database file (db.sqlite3) is not included in the repository.  
-- The application can be set up using migrations and the population script.  
-- Make sure all dependencies are installed before running the project.
+1. Create an account or log in  
+2. Write a review for a city  
+3. Save it as a draft or publish it  
+4. Edit or delete your reviews from your account page  
+5. Browse and search reviews from other users  
+
+---
+
+## 🧪 Testing
+
+Run the test suite using:
+
+```bash
+python manage.py test
+```
+
+Tests cover:
+- User authentication
+- Review creation and validation
+- Permissions (edit/delete)
+- Core view functionality
+
+---
+
+## 📁 Project Structure
+
+```
+CityRate/
+├── city/                  # Main Django app
+├── templates/             # HTML templates
+├── static/                # CSS, JS, images
+├── population_script.py   # Generates sample data
+├── import_cities.py       # Imports city dataset
+├── requirements.txt
+└── manage.py
+```
+
+---
+
+## 📌 Notes
+
+- The database file (`db.sqlite3`) is not included and will be generated after running migrations.
+- The population script creates realistic sample data for demonstration.
+- All JavaScript and CSS are stored in static files (no inline code).
+
+---
+
+## 🌐 Deployment
+
+This project is designed to be deployable on PythonAnywhere.
+
+---
+
+## 👥 Team
+
+- Sable  
+- Yara  
+- Abdullah  
+- Rabindra  
+
+---
+
+## 📚 External Resources
+
+- Bootstrap — https://getbootstrap.com/  
+- Google Fonts — https://fonts.google.com/  
+- Django Documentation — https://docs.djangoproject.com/  
+
+---
+
+## 📄 License
+
+This project was developed for educational purposes.
