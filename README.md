@@ -275,7 +275,8 @@ This project is designed to be deployable on PythonAnywhere.
 - Yara  
 - Abdullah  
 - Rabindra  
-
+- Mohammad
+- Bowen
 ---
 
 ## 📚 External Resources
